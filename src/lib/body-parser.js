@@ -22,7 +22,7 @@ module.exports = function bodyParser(req) {
       } catch (err) {
         return reject(err);
       }
-    }):
+    });
 
     req.on('error', (err) => {
       logger.log(logger.ERROR, `BODY PARSER: Error occured on parsing request body ${err}`);

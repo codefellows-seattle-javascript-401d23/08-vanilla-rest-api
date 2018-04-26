@@ -9,7 +9,7 @@ const Router = module.exports = function router() {
     GET: {},
     POST: {},
     PUT: {},
-    DELETE {};
+    DELETE: {},
   };
 };
 
@@ -29,33 +29,33 @@ Router.prototype.delete = function del(endpoint, callback) {
   this.routes.DELETE[endpoint] = callback;
 };
 
-Router.prototype.route = funtion route() {
+Router.prototype.route = function route() {
   return (req, res) => {
     Promise.all([
-        urlParser(req),
-        bodyParser(req),
+      urlParser(req),
+      bodyParser(req),
     ])
-        .then(() => {
-          if (typeof this.routes[req.method][req.url.pathname] === 'function') {
-            this.routes[req.method][req.url.pathname](req, res);
-            return;
-          }
+      .then(() => {
+        if (typeof this.routes[req.method][req.url.pathname] === 'function') {
+          this.routes[req.method][req.url.pathname](req, res);
+          return;
+        }
+        res.writeHead(404, { 'Content-Type': 'text/plain' });
+        res.write('Route Not Found FROM HERE');
+        res.end();
+      })
+      .catch((err) => {
+        if (err instanceof SyntaxError) {
           res.writeHead(404, { 'Content-Type': 'text/plain' });
-          res.write('Route Not Found FROM HERE');
-          res.end();
-        })
-        .catch((err) => {
-          if (err instanceof SyntaxError) {
-            res.writeHead(404, { 'Content-Type': 'text/plain' });
-            res.write('Route Not Found');
-            res.end();
-            return undefined;
-          }
-          logger.log(logger.ERROR, JSON.stringify(err));
-          res.writeHead(400, { 'Content-Type': 'text/plain' });
-          res.write('Bad Request');
+          res.write('Route Not Found');
           res.end();
           return undefined;
-        });
+        }
+        logger.log(logger.ERROR, JSON.stringify(err));
+        res.writeHead(400, { 'Content-Type': 'text/plain' });
+        res.write('Bad Request');
+        res.end();
+        return undefined;
+      });
   };
 };
