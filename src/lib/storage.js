@@ -38,6 +38,7 @@ storage.fetchOne = function fetchOne(schema, id) {
     if (!item) {
       return reject(new Error('item not found'));
     } 
+    console.log('what is ITEM???', item)
     //item should now be resolved as instance of a "note" resolvign and sending just properties nested uner the 'type' schema
     return resolve(item);
     // return undefined;

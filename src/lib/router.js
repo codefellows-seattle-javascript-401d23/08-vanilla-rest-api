@@ -92,7 +92,7 @@ Router.prototype.route = function route() {
         } 
      
       })
-      .catch((err)=>{
+      .catch((err) => {
         logger.log(logger.ERROR, JSON.stringify(err));
         res.writeHead(400, { 'Content-Type': 'text/plain' });
         res.write('Bad Request THE ONE AFTER THE WEIRD FIX');

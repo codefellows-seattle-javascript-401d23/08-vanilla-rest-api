@@ -35,18 +35,10 @@ module.exports = function routeTree(router) { // exporting a function that takes
       res.write('Your request requires an id');
       res.end();
       return undefined;
-    }// if
+    }// ifF
     storage.fetchOne('Tree', req.url.query.id)
       .then((item) => {
         console.log('fetchOne item', item);
-        res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.write(JSON.stringify(item));
-        res.end();
-        return undefined;
-      })// .catch here??
-    storage.delete('Tree', req.url.query.id)
-      .then((item) => {
-        console.log('delete', item);
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.write(JSON.stringify(item));
         res.end();
@@ -58,9 +50,26 @@ module.exports = function routeTree(router) { // exporting a function that takes
         res.write('Resource not found');
         res.end();
         return undefined;
-      });
-    return undefined;
+      }); // .catch here??
   });
 
-};// module
+  //   // storage.delete('Tree', req.url.query.id)
+  //   //   .then((item) => {
+  //   //     console.log('delete', item);
+  //   //     res.writeHead(200, { 'Content-Type': 'application/json' });
+  //   //     res.write(JSON.stringify(item));
+  //   //     res.end();
+  //   //     return undefined;
+  //   //   })
+  //   //   .catch((err) => {
+  //   //     logger.log(logger.ERROR, err, JSON.stringify(err));
+  //   //     res.writeHead(404, { 'Content-Type': 'text/plain' });
+  //   //     res.write('Resource not found');
+  //   //     res.end();
+  //   //     return undefined;
+  //   //   });
+  //   // return undefined;
+  // });
+};
+// module
 
