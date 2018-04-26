@@ -59,8 +59,9 @@ storage.delete = function del(schema, id) {
     if (!id) return reject(new Error('Id is undefined'));
     if (!memory[schema]) return reject(new Error(`Schema ${schema} not found in memory`));
     if (!memory[schema][id]) return reject(new Error(`Id ${id} not found in schema ${schema}`));
+    const item = memory[schema][id];
     memory[schema][id] = null;
     logger.log(logger.INFO, `STORAGE: Removed item at id ${id}`);
-    return resolve('Deleted');
+    return resolve(item);
   });
 };

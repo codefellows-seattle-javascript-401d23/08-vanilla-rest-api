@@ -55,14 +55,14 @@ describe('VALID requests to API', () => {
         });
     });
   }); // valid UPDATE
-  // describe('DELETE /api/v1/cat', () => {
-  //   test('Should respond with 204 and empty body', () => {
-  //     return superagent.del(`:${testPort}/api/v1/cat?id=${mockId}`)
-  //       .then((res) => {
-  //         expect(res.status).toEqual(204);
-  //       });
-  //   });
-  // }); // valid DELETE
+  describe('DELETE /api/v1/cat', () => {
+    test('Should respond with 204 and empty body', () => {
+      return superagent.del(`:${testPort}/api/v1/cat?id=${mockId}`)
+        .then((res) => {
+          expect(res.status).toEqual(204);
+        });
+    });
+  }); // valid DELETE
 }); // closing VALID requests
 
 describe('BAD requests to API', () => {
@@ -116,14 +116,24 @@ describe('BAD requests to API', () => {
         });
     });
   }); // bad UPDATE
-  // describe('DELETE /api/v1/cat no id', () => {
-  //   test('should return status 400', () => {
-  //     return superagent.del(`:${testPort}/api/v1/cat`)
-  //       .then(() => {})
-  //       .catch((err) => {
-  //         expect(err).toBeTruthy();
-  //         expect(err.status).toEqual(400);
-  //       });
-  //   });
-  // });
+  describe('DELETE /api/v1/cat no id', () => {
+    test('should return status 400', () => {
+      return superagent.del(`:${testPort}/api/v1/cat`)
+        .then(() => {})
+        .catch((err) => {
+          expect(err).toBeTruthy();
+          expect(err.status).toEqual(400);
+        });
+    });
+  }); // bad DELETE no id
+  describe('DELETE /api/v1/cat bad id', () => {
+    test('should return status 404', () => {
+      return superagent.del(`:${testPort}/api/v1/cat?id=4`)
+        .then(() => {})
+        .catch((err) => {
+          expect(err).toBeTruthy();
+          expect(err.status).toEqual(404);
+        });
+    });
+  }); // bad DELETE no id
 }); // closing BAD requests

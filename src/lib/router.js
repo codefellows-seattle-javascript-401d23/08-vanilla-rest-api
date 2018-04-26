@@ -32,7 +32,6 @@ Router.prototype.delete = function del(endpoint, callback) {
 
 Router.prototype.route = function route() {
   return (req, res) => {
-    // logger.log(logger.INFO, `req: ${JSON.stringify(req)}`);
     Promise.all([urlParser(req), bodyParser(req)])
       .then(() => {
         if (typeof this.routes[req.method][req.url.pathname] === 'function') {
@@ -40,7 +39,6 @@ Router.prototype.route = function route() {
           return;
         }
         resWrite(res, 404, 'text/plain', 'Route not found');
-        // return undefined;
       })
       .catch((err) => {
         if (err instanceof SyntaxError) {
