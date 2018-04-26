@@ -6,11 +6,11 @@ const storage = require('../lib/storage');
 
 module.exports = function routeLlama(router) {
   router.post('/api/v1/llama', (req, res) => {
-    logger.log(logger.INFO, 'ROUTE-NOTE: POST /api/v1/llama');
+    logger.log(logger.INFO, 'ROUTE-LLAMA: POST /api/v1/llama');
 
     try {
       const newLlama = new Llama(req.body.title, req.body.content);
-      storage.create('Llama', newLlama)
+      storage.create('Llama', newLlama) // LLama is passed over from 'item' in storage.create
         .then((llama) => {
           res.writeHead(201, { 'Content-Type': 'application/json' });
           res.write(JSON.stringify(llama));

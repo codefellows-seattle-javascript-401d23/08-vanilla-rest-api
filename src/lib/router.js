@@ -38,13 +38,13 @@ Router.prototype.delete = function remove(endpoint, callback) {
 Router.prototype.route = function route() {
   return (req, res) => {
     Promise.all([
-      urlParser(req),
-      bodyParser(req),
+      urlParser(req), // middleware
+      bodyParser(req), // middleware
     ])
-      .then(() => {
+      .then(() => { // req.method GET {}, POST [] PUT [] DELETE {}
         if (typeof this.routes[req.method][req.url.pathname] === 'function') {
           this.routes[req.method][req.url.pathname](req, res);
-          return;
+          return; // 
       }
       res.writeHead(404, { 'Content-Type': 'text/plain' });
       res.write('Route Not Found FROM HERE');
@@ -52,6 +52,7 @@ Router.prototype.route = function route() {
   })
   .catch((err) => {
     if (err instanceof SyntaxError) {
+      // you can customize your error handling here....
       res.writeHead(404, { 'Content-Type': 'test/plain' });
       res.write('Route Not Found');
       res.end();

@@ -15,7 +15,7 @@ const memory = {};
 
 // schema is the type of resource, in this case llama, and it will just be a 'string' saying this is a llama schema
 // item is an actual object that we pass in to post a newly created llama 
-storage.create = function create(schema, item) {
+storage.create = function create(schema, item) { // item is req.body...
   logger.log(logger.INFO, 'STORAGE: Created a new resource');
   return new Promise((resolve, reject) => {
     if (!schema) return reject(new Error('Cannot create a new item, schema required!'));

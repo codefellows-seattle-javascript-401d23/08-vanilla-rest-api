@@ -14,9 +14,12 @@ module.exports = function bodyParser(req) {
       message += data.toString();
     });
 
+    // listening for request to finished and then parse the JSON into a javascript object!
     req.on('end', () => {
       try {
+        console.log(req); //before 
         req.body = JSON.parse(message);
+        console.log(req); //after
         return resolve(req);
       } catch (err) {
         return reject(err);
