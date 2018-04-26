@@ -1,19 +1,19 @@
 'use strict';
 
 const logger = require('../lib/logger');
-const Note = require('../model/llama');
+const Llama = require('../model/llama');
 const storage = require('../lib/storage');
 
-module.exports = function routeNote(router) {
+module.exports = function routeLlama(router) {
   router.post('/api/v1/llama', (req, res) => {
     logger.log(logger.INFO, 'ROUTE-NOTE: POST /api/v1/llama');
 
     try {
-      const newNote = new Note(req.body.title, req.body.content);
-      storage.create('Llama', newNote)
-        .then((note) => {
+      const newLlama = new Llama(req.body.title, req.body.content);
+      storage.create('Llama', newLlama)
+        .then((llama) => {
           res.writeHead(201, { 'Content-Type': 'application/json' });
-          res.write(JSON.stringify(note));
+          res.write(JSON.stringify(llama));
           res.end();
           return undefined;
         });
