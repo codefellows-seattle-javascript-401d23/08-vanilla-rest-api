@@ -5,7 +5,7 @@ const superagent = require('superagent');
 
 const testPort = 5000;
 const mockResource = { title: 'test title', content: 'test content' };
-let mockId = null;
+let mockId = 5;
 
 beforeAll(() => server.start(testPort));
 afterAll(() => server.stop());
@@ -21,17 +21,51 @@ describe('VALID request to the API', () => {
           expect(res.body.content).toEqual(mockResource.content);
           expect(res.status).toEqual(201);
         });
-  });
+    });
   });
 
   describe('GET /api/v1/note', () => {
     it('should respond with the previously created note', () => {
       return superagent.get(`:${testPort}/api/v1/note?id=${mockId}`)
+        .query({})
         .then((res) => {
           expect(res.body.title).toEqual(mockResource.title);
           expect(res.body.content).toEqual(mockResource.content);
           expect(res.status).toEqual(200);
         });
     });
+  });
+});
+
+
+describe('INVALID request to the API', () => {
+  describe('GET /errors', () => {
+    it('should err out with 404 status code for reuest with a bad id', () => {
+      return superagent.get(`:${testPort}/api/v1/note?id=3`)
+        .query({})
+        .catch((err) => {
+          expect(err.status).toEqual(404);
+          expect(err).toBeTruthy();
+        });
+    });
+
+
+    it('should err out with 404 status code with a bad route', () => {
+      return superagent.get(`:${testPort}/api/v1/cowsay`)
+        .query({})
+        .catch((err) => {
+          expect(err.status).toEqual(404);
+          expect(err).toBeTruthy();
+        });
+    });
+
+    // it('should err out with 400 status code for result with no id', () => {
+    //   return superagent.get(`:${testPort}/api/v1/note?id= `)
+    //     .query({})
+    //     .catch((err) => {
+    //       expect(err.status).toEqual(400);
+    //       expect(err).toBeTruthy();
+    //     });
+    // });
   });
 });

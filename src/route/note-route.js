@@ -27,7 +27,7 @@ module.exports = function routeNote(router) {
     return undefined;
   });
 
-  router.get('/api/v1/note', (req, res) => {
+  router.get('/api/v1/Note', (req, res) => {
     if (!req.url.query.id) {
       res.writeHead(404, { 'Content-Type': 'text/plain' });
       res.write('Your request requires an id');
@@ -49,6 +49,31 @@ module.exports = function routeNote(router) {
         res.end();
         return undefined;
       });
-  return undefined;
+    return undefined;
+  });
+
+  router.delete('/api/v1/Note', (req, res) => {
+    if (!req.url.query.id) {
+      res.writeHead(404, { 'Content-Type': 'text/plain' });
+      res.write('Your request requires an id');
+      res.end();
+      return undefined;
+    }
+
+    storage.delete('Note', req.url.query.id)
+      .then(() => {
+        res.writeHead(204, { 'Content-Type': 'text/plain' });
+        res.write('No content in the body');
+        res.end();
+        return undefined;
+      })
+      .catch((err) => {
+        logger.log(logger.ERROR, err, JSON.stringify(err));
+        res.writeHead(404, { 'Content-Type': 'text/plain' });
+        res.write('Resource not found');
+        res.end();
+        return undefined;
+      });
+    return undefined;
   });
 };
