@@ -35,7 +35,6 @@ Router.prototype.route = function route() {
     // logger.log(logger.INFO, `req: ${JSON.stringify(req)}`);
     Promise.all([urlParser(req), bodyParser(req)])
       .then(() => {
-        logger.log(logger.INFO, `testing if function ${this.routes[req.method]}`);
         if (typeof this.routes[req.method][req.url.pathname] === 'function') {
           this.routes[req.method][req.url.pathname](req, res);
           return;

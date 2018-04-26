@@ -10,7 +10,7 @@ let mockId = null;
 beforeAll(() => server.start(testPort));
 afterAll(() => server.stop());
 
-describe('VALID request to API', () => {
+describe('VALID requests to API', () => {
   describe('POST /api/v1/cat', () => {
     test('should respond with status 201 and create a new cat', () => {
       return superagent.post(`:${testPort}/api/v1/cat`)
@@ -23,7 +23,7 @@ describe('VALID request to API', () => {
         });
     });
   }); // valid POST
-  describe('GET /api/v1/cat', () => {
+  describe('GET /api/v1/cat?id=id', () => {
     test('should respond with previously created cat', () => {
       return superagent.get(`:${testPort}/api/v1/cat?id=${mockId}`)
         .then((res) => {
@@ -42,9 +42,30 @@ describe('VALID request to API', () => {
         });
     });
   }); // valid GET ALL
+  describe('UPDATE /api/v1/cat?id=id', () => {
+    test('should respond with status 200 and return updated cat', () => {
+      const updatedMockCat = { id: mockId, name: 'Beans', favoriteFood: 'Pizza' };
+      return superagent.put(`:${testPort}/api/v1/cat`)
+        .send(updatedMockCat)
+        .then((res) => {
+          expect(res.body.id).toEqual(mockId);
+          expect(res.body.name).toEqual(updatedMockCat.name);
+          expect(res.body.favoriteFood).toEqual(updatedMockCat.favoriteFood);
+          expect(res.status).toEqual(200);
+        });
+    });
+  }); // valid UPDATE
+  // describe('DELETE /api/v1/cat', () => {
+  //   test('Should respond with 204 and empty body', () => {
+  //     return superagent.del(`:${testPort}/api/v1/cat?id=${mockId}`)
+  //       .then((res) => {
+  //         expect(res.status).toEqual(204);
+  //       });
+  //   });
+  // }); // valid DELETE
 }); // closing VALID requests
 
-describe('BAD request to API', () => {
+describe('BAD requests to API', () => {
   describe('POST /api/v1/cat', () => {
     test('should respond with 400', () => {
       return superagent.post(`:${testPort}/api/v1/cat`)
@@ -56,7 +77,7 @@ describe('BAD request to API', () => {
         });
     });
   }); // bad POST
-  describe('GET /api/v1/cat', () => {
+  describe('GET /api/v1/cat invalid and no id', () => {
     test('should respond with 404', () => {
       return superagent.get(`:${testPort}/api/v1/cat?id=${4}`)
         .then(() => {})
@@ -84,4 +105,25 @@ describe('BAD request to API', () => {
         });
     });
   }); // bad GET ALL
+  describe('UPDATE /api/v1/cat no id', () => {
+    test('should respond with 400', () => {
+      return superagent.put(`:${testPort}/api/v1/cat`)
+        .send({ name: 'Beans', favoriteFood: 'Pizza' })
+        .then(() => {})
+        .catch((err) => {
+          expect(err).toBeTruthy();
+          expect(err.status).toEqual(400);
+        });
+    });
+  }); // bad UPDATE
+  // describe('DELETE /api/v1/cat no id', () => {
+  //   test('should return status 400', () => {
+  //     return superagent.del(`:${testPort}/api/v1/cat`)
+  //       .then(() => {})
+  //       .catch((err) => {
+  //         expect(err).toBeTruthy();
+  //         expect(err.status).toEqual(400);
+  //       });
+  //   });
+  // });
 }); // closing BAD requests

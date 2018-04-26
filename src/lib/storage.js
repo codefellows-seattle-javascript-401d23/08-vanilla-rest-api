@@ -61,6 +61,6 @@ storage.delete = function del(schema, id) {
     if (!memory[schema][id]) return reject(new Error(`Id ${id} not found in schema ${schema}`));
     memory[schema][id] = null;
     logger.log(logger.INFO, `STORAGE: Removed item at id ${id}`);
-    return resolve();
+    return resolve('Deleted');
   });
 };
