@@ -34,6 +34,7 @@ Router.prototype.delete = function remove(endpoint, callback) {
   this.routes.DELETE[endpoint] = callback;
 };
 
+// return a promise.all these need to be wrapped in promises...
 Router.prototype.route = function route() {
   return (req, res) => {
     Promise.all([
