@@ -2,6 +2,23 @@
 
 This app creates new instances of cats in the api (`api/v1/cat`) which can be retrieved, updated, or deleted.
 
+### Necessary Dependencies
+- Babel (babel-eslint 8.2.3, babel-preset-env 1.6.1, babel-register 6.26.0)
+
+  "devDependencies": {
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.11.0",
+    "eslint-plugin-jest": "^21.15.1",
+    "jest": "^22.4.3",
+    "superagent": "^3.8.2"
+  },
+  "dependencies": {
+    "dotenv": "^5.0.1",
+    "uuid": "^3.2.1",
+    "winston": "^3.0.0-rc5"
+  }
+
 ### Classes
 `class Router` : Instantiates a new Router with the property `routes` which in turn has properties for `GET`, `POST`, `PUT`, and `DELETE` routes. This class also has the following prototypes (first four prototypes have arity of 2 and take in the route and a callback function)
   - `Router.prototype.get` : Creates a new `get` route property and assigns a function as its value.

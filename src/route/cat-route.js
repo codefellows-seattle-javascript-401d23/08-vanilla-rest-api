@@ -48,9 +48,7 @@ module.exports = function routeCat(router) {
     logger.log(logger.INFO, 'CAT-ROUTE: GET ALL /api/v1/cats');
     storage.fetchAll('Cat')
       .then((cats) => {
-        const idArray = [];
-        Object.keys(cats).forEach(key => idArray.push(cats[key].id));
-        resWrite(res, 200, 'application/json', JSON.stringify(idArray));
+        resWrite(res, 200, 'application/json', JSON.stringify(cats));
         return undefined;
       })
       .catch((err) => {
@@ -88,9 +86,9 @@ module.exports = function routeCat(router) {
       return undefined;
     }
     storage.delete('Cat', req.url.query.id)
-      .then((cat) => {
-        logger.log(logger.INFO, `DELETE: ${cat}`);
-        resWrite(res, 204, 'application/json', JSON.stringify(cat));
+      .then(() => {
+        logger.log(logger.INFO, `DELETE: File at ${req.url.query.id}`);
+        resWrite(res, 204, 'application/json', '');
         return undefined;
       })
       .catch((err) => {

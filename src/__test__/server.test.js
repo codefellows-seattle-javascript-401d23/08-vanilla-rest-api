@@ -37,7 +37,7 @@ describe('VALID requests to API', () => {
     test('should respond with all cats', () => {
       return superagent.get(`:${testPort}/api/v1/cats`)
         .then((res) => {
-          expect(res.body).toEqual([mockId]);
+          expect(res.body).toEqual([`${mockId}.json`]);
           expect(res.status).toEqual(200);
         });
     });

@@ -30,7 +30,9 @@
     "superagent": "^3.8.2"
   },
   "dependencies": {
+    "bluebird": "^3.5.1",
     "dotenv": "^5.0.1",
+    "fs": "0.0.1-security",
     "uuid": "^3.2.1",
     "winston": "^3.0.0-rc5"
   }
