@@ -4,13 +4,13 @@ const server = require('../lib/server');
 const superagent = require('superagent');
 
 const testPort = 5000;
-const mockCat = { name: 'Cat Face', favoriteFood: 'Beans' };
+const mockCat = { name: 'Beans', favoriteFood: 'Baked beans' };
 let mockId = null;
 
+beforeAll(() => server.start(testPort));
+afterAll(() => server.stop());
 
 describe('VALID request to API', () => {
-  beforeAll(() => server.start(testPort));
-  afterAll(() => server.stop());
   describe('POST /api/v1/cat', () => {
     test('should respond with status 201 and create a new cat', () => {
       return superagent.post(`:${testPort}/api/v1/cat`)
@@ -21,7 +21,7 @@ describe('VALID request to API', () => {
           expect(res.body.favoriteFood).toEqual(mockCat.favoriteFood);
           expect(res.status).toEqual(201);
         });
-    });
+    }); // valid POST
     describe('GET /api/v1/cat', () => {
       test('should respond with previously created cat', () => {
         return superagent.get(`:${testPort}/api/v1/cat?id=${mockId}`)
@@ -31,7 +31,16 @@ describe('VALID request to API', () => {
             expect(res.status).toEqual(200);
           });
       });
-    });
+    }); // valid GET ONE
+    describe('GET ALL /api/v1/cats', () => {
+      test('should respond with all cats', () => {
+        return superagent.get(`:${testPort}/api/v1/cats`)
+          .then((res) => {
+            expect(res.body).toEqual([mockId]);
+            expect(res.status).toEqual(200);
+          });
+      });
+    }); // valid GET ALL
   });
 });
 

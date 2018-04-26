@@ -44,6 +44,23 @@ module.exports = function routeCat(router) {
     return undefined;
   }); // closing GET
 
+  router.get('/api/v1/cats', (req, res) => {
+    logger.log(logger.INFO, 'CAT-ROUTE: GET ALL /api/v1/cats');
+    storage.fetchAll('Cat')
+      .then((cats) => {
+        const idArray = [];
+        Object.keys(cats).forEach(key => idArray.push(cats[key].id));
+        resWrite(res, 200, 'application/json', JSON.stringify(idArray));
+        return undefined;
+      })
+      .catch((err) => {
+        logger.log(logger.ERROR, JSON.stringify(err));
+        resWrite(res, 404, 'text/plain', 'Resource not found');
+        return undefined;
+      });
+    return undefined;
+  }); // closing GET
+
   router.put('/api/v1/cat', (req, res) => {
     logger.log(logger.INFO, 'CAT-ROUTE: UPDATE /api/v1/cat');
     if (!req.url.query.id) {
