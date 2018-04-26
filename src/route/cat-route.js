@@ -81,21 +81,22 @@ module.exports = function routeCat(router) {
     return undefined;
   }); // closing PUT
 
-  router.delete('/api/vi/cat', (req, res) => {
+  router.delete('/api/v1/cat', (req, res) => {
     logger.log(logger.INFO, 'CAT-ROUTE: DELETE /api/v1/cat');
     if (!req.url.query.id) {
-      resWrite(res, '400', 'text/plain', 'Request requires an ID');
+      resWrite(res, 400, 'text/plain', 'Request requires an ID');
       return undefined;
     }
     storage.delete('Cat', req.url.query.id)
       .then((cat) => {
+        logger.log(logger.INFO, `DELETE: ${cat}`);
         resWrite(res, 204, 'application/json', JSON.stringify(cat));
         return undefined;
       })
       .catch((err) => {
         logger.log(logger.ERROR, `CAT-ROUTE: Bad request ${err}`);
-        resWrite(res, 400, 'text/plain', 'Bad request');
+        resWrite(res, 404, 'text/plain', 'Bad request');
       });
     return undefined;
-  });
+  }); // closing DESTROY
 };
