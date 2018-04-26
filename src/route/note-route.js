@@ -1,24 +1,24 @@
 'use strict';
 
 const logger = require('../lib/logger');
-const Note = require('../model/note');
+const Catz = require('../model/catz');
 const storage = require('../lib/storage');
 
-module.exports = function routeNote(router) {
-  router.post('/api/v1/note', (req, res) => {
-    logger.log(logger.INFO, 'ROUTE-NOTE: POST /api/v1/note');
+module.exports = function routeCatz(router) {
+  router.post('/api/v1/catz', (req, res) => {
+    logger.log(logger.INFO, 'ROUTE-CATZ: POST /api/v1/catz');
 
     try {
-      const newNote = new Note(req.body.title, req.body.content);
-      storage.create('Note', newNote)
-        .then((note) => {
+      const newCatz = new Catz(req.body.title, req.body.content);
+      storage.create('Catz', newCatz)
+        .then((catz) => {
           res.writeHead(201, { 'Content-Type': 'application/json' });
-          res.write(JSON.stringify(note));
+          res.write(JSON.stringify(catz));
           res.end();
           return undefined;
         });
     } catch (err) {
-      logger.log(logger.ERROR, `ROUTE-NOTE: There was a bad request ${err}`);
+      logger.log(logger.ERROR, `ROUTE-CATZ: There was a bad request ${err}`);
       res.writeHead(400, { 'Content-Type': 'text/plain' });
       res.write('Bad request');
       res.end();
@@ -27,7 +27,7 @@ module.exports = function routeNote(router) {
     return undefined;
   });
 
-  router.get('/api/v1/Note', (req, res) => {
+  router.get('/api/v1/Catz', (req, res) => {
     if (!req.url.query.id) {
       res.writeHead(404, { 'Content-Type': 'text/plain' });
       res.write('Your request requires an id');
@@ -35,7 +35,7 @@ module.exports = function routeNote(router) {
       return undefined;
     }
 
-    storage.fetchOne('Note', req.url.query.id)
+    storage.fetchOne('Catz', req.url.query.id)
       .then((item) => {
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.write(JSON.stringify(item));
@@ -52,7 +52,7 @@ module.exports = function routeNote(router) {
     return undefined;
   });
 
-  router.delete('/api/v1/Note', (req, res) => {
+  router.delete('/api/v1/Catz', (req, res) => {
     if (!req.url.query.id) {
       res.writeHead(404, { 'Content-Type': 'text/plain' });
       res.write('Your request requires an id');
@@ -60,7 +60,7 @@ module.exports = function routeNote(router) {
       return undefined;
     }
 
-    storage.delete('Note', req.url.query.id)
+    storage.delete('Catz', req.url.query.id)
       .then(() => {
         res.writeHead(204, { 'Content-Type': 'text/plain' });
         res.write('No content in the body');

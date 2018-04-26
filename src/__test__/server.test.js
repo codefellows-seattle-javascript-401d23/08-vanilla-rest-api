@@ -11,9 +11,9 @@ beforeAll(() => server.start(testPort));
 afterAll(() => server.stop());
 
 describe('VALID request to the API', () => {
-  describe('POST /api/v1/note', () => {
-    it('should respond with status 201 and created a new note', () => {
-      return superagent.post(`:${testPort}/api/v1/note`)
+  describe('POST /api/v1/catz', () => {
+    it('should respond with status 201 and created a new catz', () => {
+      return superagent.post(`:${testPort}/api/v1/catz`)
         .send(mockResource)
         .then((res) => {
           mockId = res.body.id;
@@ -24,9 +24,9 @@ describe('VALID request to the API', () => {
     });
   });
 
-  describe('GET /api/v1/note', () => {
-    it('should respond with the previously created note', () => {
-      return superagent.get(`:${testPort}/api/v1/note?id=${mockId}`)
+  describe('GET /api/v1/catz', () => {
+    it('should respond with the previously created catz', () => {
+      return superagent.get(`:${testPort}/api/v1/catz?id=${mockId}`)
         .query({})
         .then((res) => {
           expect(res.body.title).toEqual(mockResource.title);
@@ -41,7 +41,7 @@ describe('VALID request to the API', () => {
 describe('INVALID request to the API', () => {
   describe('GET /errors', () => {
     it('should err out with 404 status code for reuest with a bad id', () => {
-      return superagent.get(`:${testPort}/api/v1/note?id=3`)
+      return superagent.get(`:${testPort}/api/v1/catz?id=3`)
         .query({})
         .catch((err) => {
           expect(err.status).toEqual(404);
@@ -60,7 +60,7 @@ describe('INVALID request to the API', () => {
     });
 
     // it('should err out with 400 status code for result with no id', () => {
-    //   return superagent.get(`:${testPort}/api/v1/note?id= `)
+    //   return superagent.get(`:${testPort}/api/v1/catz?id= `)
     //     .query({})
     //     .catch((err) => {
     //       expect(err.status).toEqual(400);
