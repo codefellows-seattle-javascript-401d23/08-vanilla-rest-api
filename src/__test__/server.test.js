@@ -39,7 +39,7 @@ describe('VALID request to the API', () => {
         });
     });// it block
   });// inner describe block
-});
+});// outter describe
 describe('INVALID request to the API', () => {
   describe('GET /api/v1/tree?title=', () => {
     it('should err out with 400 status code for not sending id in query', () => {
@@ -70,8 +70,8 @@ describe('INVALID request to the API', () => {
           expect(err).toBeTruthy();
         });
     });
-  });//inner desc
- });
+  });// inner desc
+ });// outer desc
 
 
 // GET: test 404, it should respond with 'not found' for valid requests made with an id that was not found

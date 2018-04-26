@@ -3,15 +3,19 @@
 const logger = require('../lib/logger');
 const Tree = require('../model/tree');// we are defining the variable for this module
 const storage = require('../lib/storage');
+//const router = require('../lib/router');
 
-module.exports = function routeTree(router) {
+module.exports = function routeTree(router) { // exporting a function that takes in 'router'
 
-  router.post('/api/v1/tree', (req, res) => {
+  router.post('/api/v1/tree', (req, res) => {// an instance of our router it maps back to router.POST, everythign in our ty block here is equal to our try block here-- when we make our request--- it hits this-- which bounces to router which insaantiates this route and calls this try block??
+    console.log('is this our router object?', router.routes);
+
     logger.log(logger.INFO, 'TREE-ROUTE: POST /api/v1/tree');
     try {
-      const newTree = new Tree(req.body.title, req.body.content);
+      const newTree = new Tree(req.body.title, req.body.content);// this defined in middleware-- url parser taking string info, sending to body parser and converting to JSON
       storage.create('Tree', newTree)
         .then((tree) => {
+          // here treee is an item under the schema/category--> comes from 'storage' into here
           res.writeHead(201, { 'Content-Type': 'application/json' });
           res.write(JSON.stringify(tree));
           res.end();
