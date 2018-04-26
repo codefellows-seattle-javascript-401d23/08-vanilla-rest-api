@@ -31,10 +31,12 @@ Router.prototype.post = function post(endpoint, callback) {
 };
 
 Router.prototype.put = function put(endpoint, callback) {
+  console.log(`Router: PUT ${endpoint} mounted`);
   this.routes.PUT[endpoint] = callback;
 };
 
 Router.prototype.delete = function del(endpoint, callback) {
+  console.log(`Router: DELETE ${endpoint} mounted`);
   this.routes.DELETE[endpoint] = callback;
 };
 
@@ -57,17 +59,18 @@ Router.prototype.route = function route() {
         res.end();
       })
       .catch((err) => {
-        if (err instanceof SyntaxError) {
-          // looks like body parser error is getting routed here-- yes, syntax error is built in object-- basically if invalid path this is the error the body parser throws-- so an error in the 
-          res.writeHead(404, { 'Content-Type': 'text/plain' });
-          res.write('Route Not Found / BAD REQUEST in Body Parser');
-          res.end();
-          return undefined;
-        }
+  
         if (res.method === 'POST' && !res.body.title) {
           // looks like body parser error is getting routed here-- yes, syntax error is built in object-- basically if invalid path this is the error the body parser throws-- so an error in the 
           res.writeHead(400, { 'Content-Type': 'text/plain' });
           res.write('Route not found--title input required');
+          res.end();
+          return undefined;
+        }
+        if (err instanceof SyntaxError) {
+          // looks like body parser error is getting routed here-- yes, syntax error is built in object-- basically if invalid path this is the error the body parser throws-- so an error in the 
+          res.writeHead(404, { 'Content-Type': 'text/plain' });
+          res.write('Route Not Found / BAD REQUEST in Body Parser');
           res.end();
           return undefined;
         }
@@ -87,6 +90,14 @@ Router.prototype.route = function route() {
         if (typeof this.routes[otherReq.method][otherReq.url.pathname] === 'function') {
           this.routes[otherReq.method][otherReq.url.pathname](otherReq, res);
         } 
+     
+      })
+      .catch((err)=>{
+        logger.log(logger.ERROR, JSON.stringify(err));
+        res.writeHead(400, { 'Content-Type': 'text/plain' });
+        res.write('Bad Request THE ONE AFTER THE WEIRD FIX');
+        res.end();
+        return undefined;
       });//final .then 
   };
 }; 

@@ -43,6 +43,14 @@ module.exports = function routeTree(router) { // exporting a function that takes
         res.write(JSON.stringify(item));
         res.end();
         return undefined;
+      })// .catch here??
+    storage.delete('Tree', req.url.query.id)
+      .then((item) => {
+        console.log('delete', item);
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.write(JSON.stringify(item));
+        res.end();
+        return undefined;
       })
       .catch((err) => {
         logger.log(logger.ERROR, err, JSON.stringify(err));

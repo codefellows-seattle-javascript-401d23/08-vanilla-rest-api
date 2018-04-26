@@ -88,7 +88,6 @@ storage.delete = function del(schema, id) {
     if (!item) {
       return reject(new Error('item not found'));
     }
-  
     delete memory[schema][id];  // item has all info I neeed????
     console.log(allTrees); /// nothing works so how can i test>!!>!>!>!!>!>
   

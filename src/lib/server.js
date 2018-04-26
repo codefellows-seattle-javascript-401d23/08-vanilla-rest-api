@@ -7,6 +7,7 @@ const Router = require('./router');
 
 const router = new Router();
 require('../routes/tree-route')(router);
+console.log('server in ROUTER', router);
 
 // Application set up 
 // anonymous
