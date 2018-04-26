@@ -9,6 +9,6 @@ module.exports = class {
     this.title = title;
     this.content = content;
     this.id = uuid();
-    logger.log(logger.INFO, `panda: Created a new panda: ${JSON.stringify(this)}`);
+    logger.log(logger.INFO, `frog: Created a new frog: ${JSON.stringify(this)}`);
   }
 };

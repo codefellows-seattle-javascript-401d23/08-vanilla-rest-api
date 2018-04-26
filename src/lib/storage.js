@@ -30,12 +30,20 @@ storage.fetchOne = function fetchOne(schema, id) {
   });
 };
 
-storage.fetchAll = function fetchAll() {
+storage.fetchAll = function fetchAll(schema, id) {
+  return new Promise((resolve, reject) => {
+    if (!schema) return reject(new Error('expected schema name'));
+    if (!id) return reject(new Error('expected id'));
+    if (!memory[schema]) return reject(new Error('schema not found'));
 
-};
+    const allItems = Object.values(memory[schema]);
+    const frog = allItems.map(ids => memory[ids]);
 
-storage.update = function update() {
-
+    if (!frog) {
+      return reject(new Error('object not found'));
+    }
+    return resolve(frog);
+  });
 };
 
 storage.delete = function del() {

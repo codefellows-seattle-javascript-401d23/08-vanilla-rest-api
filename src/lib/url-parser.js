@@ -9,4 +9,3 @@ module.exports = function urlParser(req) {
   return Promise.resolve(req);
 };
 
-// get promises started

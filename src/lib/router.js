@@ -7,8 +7,7 @@ const urlParser = require('./url-parser');
 
 const Router = module.exports = function router() {
   this.routes = {
-    GET: {
-    },
+    GET: {},
     POST: {},
     PUT: {},
     DELETE: {},
@@ -39,7 +38,6 @@ Router.prototype.route = function route() {
       urlParser(req),
       bodyParser(req),
     ])
-    // this is all undefined
       .then(() => {
         if (typeof this.routes[req.method][req.url.pathname] === 'function') {
           this.routes[req.method][req.url.pathname](req, res);
