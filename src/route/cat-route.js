@@ -28,7 +28,7 @@ module.exports = function routeCat(router) {
   router.get('/api/v1/cat', (req, res) => {
     logger.log(logger.INFO, 'CAT-ROUTE: GET /api/v1/cat');
     if (!req.url.query.id) {
-      resWrite(res, 404, 'text/plain', 'Request requires an ID');
+      resWrite(res, 400, 'text/plain', 'Request requires an ID');
       return undefined;
     }
     storage.fetchOne('Cat', req.url.query.id)

@@ -21,27 +21,67 @@ describe('VALID request to API', () => {
           expect(res.body.favoriteFood).toEqual(mockCat.favoriteFood);
           expect(res.status).toEqual(201);
         });
-    }); // valid POST
-    describe('GET /api/v1/cat', () => {
-      test('should respond with previously created cat', () => {
-        return superagent.get(`:${testPort}/api/v1/cat?id=${mockId}`)
-          .then((res) => {
-            expect(res.body.name).toEqual(mockCat.name);
-            expect(res.body.favoriteFood).toEqual(mockCat.favoriteFood);
-            expect(res.status).toEqual(200);
-          });
-      });
-    }); // valid GET ONE
-    describe('GET ALL /api/v1/cats', () => {
-      test('should respond with all cats', () => {
-        return superagent.get(`:${testPort}/api/v1/cats`)
-          .then((res) => {
-            expect(res.body).toEqual([mockId]);
-            expect(res.status).toEqual(200);
-          });
-      });
-    }); // valid GET ALL
-  });
-});
+    });
+  }); // valid POST
+  describe('GET /api/v1/cat', () => {
+    test('should respond with previously created cat', () => {
+      return superagent.get(`:${testPort}/api/v1/cat?id=${mockId}`)
+        .then((res) => {
+          expect(res.body.name).toEqual(mockCat.name);
+          expect(res.body.favoriteFood).toEqual(mockCat.favoriteFood);
+          expect(res.status).toEqual(200);
+        });
+    });
+  }); // valid GET ONE
+  describe('GET ALL /api/v1/cats', () => {
+    test('should respond with all cats', () => {
+      return superagent.get(`:${testPort}/api/v1/cats`)
+        .then((res) => {
+          expect(res.body).toEqual([mockId]);
+          expect(res.status).toEqual(200);
+        });
+    });
+  }); // valid GET ALL
+}); // closing VALID requests
 
-//
+describe('BAD request to API', () => {
+  describe('POST /api/v1/cat', () => {
+    test('should respond with 400', () => {
+      return superagent.post(`:${testPort}/api/v1/cat`)
+        .send({})
+        .then(() => {})
+        .catch((err) => {
+          expect(err).toBeTruthy();
+          expect(err.status).toEqual(400);
+        });
+    });
+  }); // bad POST
+  describe('GET /api/v1/cat', () => {
+    test('should respond with 404', () => {
+      return superagent.get(`:${testPort}/api/v1/cat?id=${4}`)
+        .then(() => {})
+        .catch((err) => {
+          expect(err).toBeTruthy();
+          expect(err.status).toEqual(404);
+        });
+    });
+    test('should respond with 400', () => {
+      return superagent.get(`:${testPort}/api/v1/cat`)
+        .then(() => {})
+        .catch((err) => {
+          expect(err).toBeTruthy();
+          expect(err.status).toEqual(400);
+        });
+    });
+  }); // bad GET ONE
+  describe('GET ALL /api/v1/cots', () => {
+    test('should respond with 404', () => {
+      return superagent.get(`:${testPort}/api/v1/cots`)
+        .then(() => {})
+        .catch((err) => {
+          expect(err).toBeTruthy();
+          expect(err.status).toEqual(404);
+        });
+    });
+  }); // bad GET ALL
+}); // closing BAD requests
