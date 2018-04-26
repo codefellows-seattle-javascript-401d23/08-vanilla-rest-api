@@ -44,7 +44,7 @@ Router.prototype.route = function route() {
         res.writeHead(404, { 'Content-Type': 'text/plain' });
         res.write('Route not found');
         res.end();
-        return undefined;
+        // return undefined;
       })
       .catch((err) => {
         if (err instanceof SyntaxError) {

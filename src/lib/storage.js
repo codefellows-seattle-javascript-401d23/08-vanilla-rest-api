@@ -3,7 +3,7 @@
 const logger = require('./logger');
 
 const storage = module.exports = {};
-const memory = {}
+const memory = {};
 
 storage.create = function create(schema, item) {
   return new Promise((resolve, reject) => {

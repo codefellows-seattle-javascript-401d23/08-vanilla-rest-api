@@ -12,14 +12,14 @@ module.exports = function routeBird(router) {
       const newBird = new Bird(req.body.name, req.body.type, req.body.info);
       storage.create('Bird', newBird)
         .then((bird) => {
-          res.writeHead(201, {'Content-Type': 'application/json' });
+          res.writeHead(201, { 'Content-Type': 'application/json' });
           res.write(JSON.stringify(bird));
           res.end();
           return undefined;
         });
     } catch (err) {
       logger.log(logger.ERROR, `BIRD-ROUTE: There was a bad request ${err}`);
-      res.writeHead(400, {'Content-Type': 'text/plain' });
+      res.writeHead(400, { 'Content-Type': 'text/plain' });
       res.write('BIRD-ROUTE: Bad request');
       res.end();
       return undefined;
@@ -27,11 +27,11 @@ module.exports = function routeBird(router) {
     return undefined;
   });
 
-  router.get('api/v1/note', (req, res) => {
+  router.get('api/v1/bird', (req, res) => {
     if (!req.url.query.id) {
       res.writeHead(400, { 'Content-Type': 'text/plain' });
       res.write('Your request requires an id');
-      res.end()
+      res.end();
       return undefined;
     }
     storage.fetchOne('Bird', req.url.query.id)

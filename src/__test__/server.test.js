@@ -5,7 +5,7 @@ const superagent = require('superagent');
 
 const testPort = 5000;
 const mockResource = { name: 'Hummingbird', type: 'Tiny Tiny', info: 'Cute but mean.' };
-let mockId = null;
+// let mockId = null;
 
 beforeAll(() => server.start(testPort));
 afterAll(() => server.stop());
@@ -19,7 +19,7 @@ describe('VALID request to the API', () => {
         .send(mockResource)
         .then((res) => {
           console.log(res.body);
-          mockId = res.body.id;
+          // mockId = res.body.id;
           // why do we need to reassign this?
           // Because the id is created when the item is created.
           // It won't have a value we can use until we send the POST request
