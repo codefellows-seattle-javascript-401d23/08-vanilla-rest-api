@@ -27,21 +27,9 @@ module.exports = function routeCat(router) {
 
   router.get('/api/v1/cat', (req, res) => {
     logger.log(logger.INFO, 'CAT-ROUTE: GET /api/v1/cat');
-    if (!req.url.query.schema) {
-      resWrite(res, 400, 'text/plain', 'Request requires a schema');
-      return undefined;
-    }
     if (!req.url.query.id) {
-      storage.fetchAll('Cat')
-        .then((cats) => {
-          resWrite(res, 200, 'application/json', JSON.stringify(cats));
-          return undefined;
-        })
-        .catch((err) => {
-          logger.log(logger.ERROR, JSON.stringify(err));
-          resWrite(res, 404, 'text/plain', 'Resource not found');
-          return undefined;
-        });
+      resWrite(res, 404, 'text/plain', 'Request requires an ID');
+      return undefined;
     }
     storage.fetchOne('Cat', req.url.query.id)
       .then((cat) => {
@@ -69,3 +57,15 @@ module.exports = function routeCat(router) {
 
 // storage.fetchOne('Cat', req.url.query.id)
 //   .then()
+
+// fetchAll
+// storage.fetchAll('Cat')
+//   .then((cats) => {
+//     resWrite(res, 200, 'application/json', JSON.stringify(cats));
+//     return undefined;
+//   })
+//   .catch((err) => {
+//     logger.log(logger.ERROR, JSON.stringify(err));
+//     resWrite(res, 404, 'text/plain', 'Resource not found');
+//     return undefined;
+//   });
