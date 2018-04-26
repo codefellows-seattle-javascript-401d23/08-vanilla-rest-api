@@ -5,9 +5,7 @@ const Bird = require('../model/bird');
 const storage = require('../lib/storage');
 
 module.exports = function routeBird(router) {
-  router.post('api/v1/bird', (req, res) => {
-    logger.log(logger.INFO, 'BIRD-ROUTE: POST /api/v1/bird');
-
+  router.post('/api/v1/bird', (req, res) => {
     try {
       const newBird = new Bird(req.body.name, req.body.type, req.body.info);
       storage.create('Bird', newBird)
@@ -27,7 +25,7 @@ module.exports = function routeBird(router) {
     return undefined;
   });
 
-  router.get('api/v1/bird', (req, res) => {
+  router.get('/api/v1/bird', (req, res) => {
     if (!req.url.query.id) {
       res.writeHead(400, { 'Content-Type': 'text/plain' });
       res.write('Your request requires an id');

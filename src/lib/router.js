@@ -36,26 +36,26 @@ Router.prototype.route = function route() {
       bodyParser(req),
     ])
       .then(() => {
-        if (typeof this.route[req.method][req.url.pathname] === 'function') {
-          this.route[req.method][req.url.pathname](req, res);
+        if (typeof this.routes[req.method][req.url.pathname] === 'function') {
+          this.routes[req.method][req.url.pathname](req, res);
           return;
         }
 
         res.writeHead(404, { 'Content-Type': 'text/plain' });
-        res.write('Route not found');
+        res.write('ROUTER .THEN: Route not found');
         res.end();
-        // return undefined;
       })
       .catch((err) => {
         if (err instanceof SyntaxError) {
           res.writeHead(404, { 'Content-Type': 'text/plain' });
-          res.write('Route not found');
+          res.write('ROUTER .CATCH: Route not found');
           res.end();
           return undefined;
         }
+        console.log(req.body, 'ROUTER: REQ.BODY');
         logger.log(logger.ERROR, JSON.stringify(err));
         res.writeHead(400, { 'Content-Type': 'text/plain' });
-        res.write('Bad Request');
+        res.write('ROUTER .CATCH: Bad Request');
         res.end();
         return undefined;
       });

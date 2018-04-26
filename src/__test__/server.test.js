@@ -10,7 +10,7 @@ const mockResource = { name: 'Hummingbird', type: 'Tiny Tiny', info: 'Cute but m
 beforeAll(() => server.start(testPort));
 afterAll(() => server.stop());
 
-// Remember to post first BEFORE you get, because you can't get something until it is created.
+// post first BEFORE you get, because you can't get something until it is created.
 
 describe('VALID request to the API', () => {
   describe('POST /api/v1/bird', () => {
@@ -29,6 +29,7 @@ describe('VALID request to the API', () => {
           expect(res.body.info).toEqual(mockResource.info);
           expect(res.status).toEqual(201);
         });
+      // if testing for errors, test them in a .catch block
     });
   });
 });
