@@ -5,6 +5,8 @@ const superagent = require('superagent');
 
 const testPort = 5000;
 const mockResource = { title: 'test title', content: 'test content' };
+const mockResource2 = { title: 'test title 2', content: 'test content 2' };
+const mockBadResource = { title: '', content: '' };
 let mockId = null;
 
 beforeAll(() => server.start(testPort));
@@ -12,9 +14,9 @@ afterAll(() => server.stop());
 
 // In this lab, you MUST post first BEFORE you get
 describe('VALID request to the API', () => {
-  describe('POST /api/v1/note', () => {
-    it('should respond with status 201 and created a new note', () => {
-      return superagent.post(`:${testPort}/api/v1/note`)
+  describe('POST /api/v1/tree', () => {
+    it('should respond with status 201 and created a new tree', () => {
+      return superagent.post(`:${testPort}/api/v1/tree`)
         .send(mockResource)
         .then((res) => {
           mockId = res.body.id;
@@ -25,10 +27,10 @@ describe('VALID request to the API', () => {
     });
   });
 
-  describe('GET /api/v1/note', () => {
-    it('should respond with the a previously created note', () => {
+  describe('GET /api/v1/tree/id=UUID', () => {
+    it('should respond with the a previously created tree', () => {
       // console.log(mockId, 'MOCK ID IN GET BLOCK')
-      return superagent.get(`:${testPort}/api/v1/note?id=${mockId}`)
+      return superagent.get(`:${testPort}/api/v1/tree?id=${mockId}`)
         .then((res) => {
           expect(res.body.title).toEqual(mockResource.title);
           expect(res.body.content).toEqual(mockResource.content);
@@ -36,4 +38,64 @@ describe('VALID request to the API', () => {
         });
     });
   });
+  describe('DELETE /api/v1/tree/id=UUID', () => {
+    it('should delete the a previously created tree', () => {
+      // console.log(mockId, 'MOCK ID IN GET BLOCK')
+      return superagent.delete(`:${testPort}/api/v1/tree?id=${mockId}`)
+        .then((res) => {
+          expect(res.body.title).toEqual(mockResource.title);
+          expect(res.body.content).toEqual('');
+          expect(res.status).toEqual(204);
+        });
+    });
+  });
+  describe('GET /api/v1/tree', () => {
+    it('should respond with all the trees', () => {
+      // console.log(mockId, 'MOCK ID IN GET BLOCK')
+      // this is not working
+      superagent.post(`:${testPort}/api/v1/tree`)
+        .send(mockResource)
+        .send(mockResource2);
+      return superagent.get(`:${testPort}/api/v1/tree`)
+        .then((res) => {
+          console.log('all tree test: ', mockResource.content, mockResource2.content);
+          expect(res.body.content).toContain(mockResource.content && mockResource2.content);
+          expect(res.status).toEqual(200);
+        });
+    });
+  });
+});
+describe('INVALID request to the API', () => {
+  describe('POST /api/v1/tree', () => {
+    it('should respond with bad request and status 400 if no request body or the body was invalid', () => {
+      return superagent.post(`:${testPort}/api/v1/tree`)
+        .send(mockBadResource)
+        .catch((res) => {
+          expect(res.status).toEqual(400);
+          expect(res.body).toEqual('Bad Request');
+        });
+    });
+  });
+
+  describe('GET /api/v1/tree?id=1', () => {
+    it('should respond with not found for valid requests with an id thats not found', () => {
+      // console.log(mockId, 'MOCK ID IN GET BLOCK')
+      return superagent.get(`:${testPort}/api/v1/tree?id=1`)
+        .catch((res) => {
+          expect(res.status).toEqual(404);
+          expect(res.body.content).toEqual('Your request requires an id');
+        });
+    });
+  });
+  describe('GET /api/v1/tree?id=', () => {
+    it('should respond with bad request if no id is provided', () => {
+      // console.log(mockId, 'MOCK ID IN GET BLOCK')
+      return superagent.get(`:${testPort}/api/v1/tree?id=`)
+        .catch((res) => {
+          expect(res.status).toEqual(400);
+          expect(res.body).toEqual('bad request');
+        });
+    });
+  });
+
 });

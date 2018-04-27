@@ -1,9 +1,3 @@
-// 'use strict';
-
-
-// const bodyParser = require('./body-parser');
-// const urlParser = require('./url-parser');
-
 'use strict';
 
 const logger = require('./logger');
@@ -14,8 +8,8 @@ const Router = module.exports = function router() {
   this.routes = {
     GET: {
       // Just a hard-coded example
-      // '/api/v1/note': (req, res) => {},
-      // '/api/v1/note/:id': (req, res) => {},
+      // '/api/v1/tree': (req, res) => {},
+      // '/api/v1/tree/:id': (req, res) => {},
     },
     POST: {},
     PUT: {},
@@ -36,7 +30,8 @@ Router.prototype.put = function put(endpoint, callback) {
   this.routes.PUT[endpoint] = callback;
 };
 
-Router.prototype.delete = function dlete(endpoint, callback) {
+Router.prototype.delete = function del(endpoint, callback) {
+  console.log(`Router: DELETE ${endpoint} mounted`)
   this.routes.DELETE[endpoint] = callback;
 };
 
