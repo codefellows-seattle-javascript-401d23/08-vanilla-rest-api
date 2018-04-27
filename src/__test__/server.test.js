@@ -67,7 +67,7 @@ describe('VALID requests to API', () => {
 
 describe('BAD requests to API', () => {
   describe('POST /api/v1/cat', () => {
-    test('should respond with 400', () => {
+    test('should respond with 400, no body', () => {
       return superagent.post(`:${testPort}/api/v1/cat`)
         .send({})
         .then(() => {})
@@ -95,9 +95,9 @@ describe('BAD requests to API', () => {
         });
     });
   }); // bad GET ONE
-  describe('GET ALL /api/v1/cots', () => {
+  describe('GET ALL /api/v1/BADSCHEMA', () => {
     test('should respond with 404', () => {
-      return superagent.get(`:${testPort}/api/v1/cots`)
+      return superagent.get(`:${testPort}/api/v1/BADSCHEMA`)
         .then(() => {})
         .catch((err) => {
           expect(err).toBeTruthy();
@@ -115,7 +115,18 @@ describe('BAD requests to API', () => {
           expect(err.status).toEqual(400);
         });
     });
-  }); // bad UPDATE
+  }); // bad UPDATE no id
+  describe('UPDATE /api/v1/cat bad id', () => {
+    test('should respond with 404', () => {
+      return superagent.put(`:${testPort}/api/v1/cat`)
+        .send({ id: 4, name: 'Beans', favoriteFood: 'Pizza' })
+        .then(() => {})
+        .catch((err) => {
+          expect(err).toBeTruthy();
+          expect(err.status).toEqual(404);
+        });
+    });
+  }); // bad UPDATE bad id
   describe('DELETE /api/v1/cat no id', () => {
     test('should return status 400', () => {
       return superagent.del(`:${testPort}/api/v1/cat`)

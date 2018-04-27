@@ -1,67 +1,67 @@
 'use strict';
 
 const logger = require('./logger');
+const Promise = require('bluebird');
+const fs = Promise.promisifyAll(require('fs'), { suffix: 'Prom' });
 
 const storage = module.exports = {};
-const memory = {};
 
 storage.create = function create(schema, item) {
-  return new Promise((resolve, reject) => {
-    if (!schema) return reject(new Error('Schema is undefined'));
-    if (!item) return reject(new Error('Item is undefined'));
-    if (!memory[schema]) memory[schema] = {};
-    memory[schema][item.id] = item;
-    logger.log(logger.INFO, `STORAGE: Created new cat ${item}`);
-    return resolve(item);
-  });
+  if (!schema) return Promise.reject(new Error('Schema is undefined'));
+  if (!item) return Promise.reject(new Error('Item is undefined'));
+  const jsonItem = JSON.stringify(item);
+  return fs.writeFileProm(`${__dirname}/../data/${schema}/${item.id}.json`, jsonItem)
+    .then(() => {
+      logger.log(logger.INFO, `STORAGE: Created new cat ${item}`);
+      return Promise.resolve(item);
+    })
+    .catch(err => Promise.reject(err));
 };
 
 storage.fetchOne = function fetchOne(schema, id) {
-  return new Promise((resolve, reject) => {
-    if (!schema) return reject(new Error('Schema is undefined'));
-    if (!id) return reject(new Error('Id is undefined'));
-    if (!memory[schema]) return reject(new Error(`Schema ${schema} not found in memory`));
-    const item = memory[schema][id];
-    if (!item) return reject(new Error(`Item not found for id ${id}`));
-    logger.log(logger.INFO, `STORAGE: Fetching cat ${item}`);
-    return resolve(item);
-  });
+  if (!schema) return Promise.reject(new Error('Schema is undefined'));
+  if (!id) return Promise.reject(new Error('Id is undefined'));
+  return fs.readFileProm(`${__dirname}/../data/${schema}/${id}.json`)
+    .then((data) => {
+      try {
+        return Promise.resolve(JSON.parse(data.toString()));
+      } catch (err) {
+        return Promise.reject(err);
+      }
+    })
+    .catch(err => logger.log(logger.ERROR, err));
 };
 
 storage.fetchAll = function fetchAll(schema) {
-  return new Promise((resolve, reject) => {
-    if (!schema) return reject(new Error('Schema is undefined'));
-    if (!memory[schema]) return reject(new Error(`Schema ${schema} not found in memory`));
-    const all = memory[schema];
-    logger.log(logger.INFO, `STORAGE: Fetching all at ${schema}`);
-    return resolve(all);
-  });
+  if (!schema) return Promise.reject(new Error('Schema is undefined'));
+  return fs.readdirProm(`${__dirname}/../data/${schema}`)
+    .then((files) => {
+      return Promise.resolve(files);
+    })
+    .catch(err => logger.log(logger.ERROR, err));
 };
 
 storage.update = function update(schema, id, name, favoriteFood) {
-  return new Promise((resolve, reject) => {
-    if (!schema) return reject(new Error('Schema is undefined'));
-    if (!id) return reject(new Error('Id is undefined'));
-    if (!memory[schema]) return reject(new Error(`Schema ${schema} not found in memory`));
-    const item = memory[schema][id];
-    if (!item) return reject(new Error(`Item not found for id ${id}`));
-    item.id = id;
-    item.name = name;
-    item.favoriteFood = favoriteFood;
-    logger.log(logger.INFO, `STORAGE: Updated at id ${id}: ${item}`);
-    return resolve(item);
-  });
+  if (!schema) return Promise.reject(new Error('Schema is undefined'));
+  if (!id) return Promise.reject(new Error('Id is undefined'));
+  const item = { id, name, favoriteFood };
+  const jsonItem = JSON.stringify(item);
+  return fs.writeFileProm(`${__dirname}/../data/${schema}/${id}.json`, jsonItem)
+    .then(() => {
+      logger.log(logger.INFO, `STORAGE: Updated at id ${id}`);
+      return Promise.resolve(item);
+    })
+    .catch(err => Promise.reject(err));
 };
 
 storage.delete = function del(schema, id) {
-  return new Promise((resolve, reject) => {
-    if (!schema) return reject(new Error('Schema is undefined'));
-    if (!id) return reject(new Error('Id is undefined'));
-    if (!memory[schema]) return reject(new Error(`Schema ${schema} not found in memory`));
-    if (!memory[schema][id]) return reject(new Error(`Id ${id} not found in schema ${schema}`));
-    const item = memory[schema][id];
-    memory[schema][id] = null;
-    logger.log(logger.INFO, `STORAGE: Removed item at id ${id}`);
-    return resolve(item);
-  });
+  if (!schema) return Promise.reject(new Error('Schema is undefined'));
+  if (!id) return Promise.reject(new Error('Id is undefined'));
+  const object = { content: '' };
+  return fs.unlinkProm(`${__dirname}/../data/${schema}/${id}.json`)
+    .then(() => {
+      logger.log(logger.INFO, `STORAGE: Removed item at id ${id}`);
+      return Promise.resolve(object);
+    })
+    .catch(err => logger.log(logger.ERROR, err));
 };
