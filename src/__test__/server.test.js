@@ -4,79 +4,102 @@ const server = require('../lib/server');
 const superagent = require('superagent');
 
 const testPort = 5000;
-const mockResource = { title: 'test title', content: 'test content'};
-let mockId = null; 
+const mockResource = { title: 'test title', content: 'test content' };
+const mockResource2 = { title: 'test title 2', content: 'test content 2' };
+const mockBadResource = { title: '', content: '' };
+let mockId = null;
 
 beforeAll(() => server.start(testPort));
 afterAll(() => server.stop());
 
-//In this lab, you MUST post first BEFORE you get
-
+// In this lab, you MUST post first BEFORE you get
 describe('VALID request to the API', () => {
   describe('POST /api/v1/tree', () => {
     it('should respond with status 201 and created a new tree', () => {
       return superagent.post(`:${testPort}/api/v1/tree`)
         .send(mockResource)
         .then((res) => {
-          mockId = res.body.id; // this is caching the crazy id we get back from uuid
+          mockId = res.body.id;
           expect(res.body.title).toEqual(mockResource.title);
           expect(res.body.content).toEqual(mockResource.content);
           expect(res.status).toEqual(201);
         });
-    });// it block
-  });// inner describe block
-  describe('GET /api/v1/tree', () => {
-    it('should respond with status 201 and created a new tree', () => {
-      superagent.post(`:${testPort}/api/v1/tree`)
-      return superagent.get(`:${testPort}/api/v1/tree${mockId}`)
-        .send(mockResource)
+    });
+  });
+
+  describe('GET /api/v1/tree/id=UUID', () => {
+    it('should respond with the a previously created tree', () => {
+      // console.log(mockId, 'MOCK ID IN GET BLOCK')
+      return superagent.get(`:${testPort}/api/v1/tree?id=${mockId}`)
         .then((res) => {
-          expect(res.body.id).toEqual(mockId); // caching crazy id in global var above
           expect(res.body.title).toEqual(mockResource.title);
           expect(res.body.content).toEqual(mockResource.content);
-          //expect(res.status).toEqual(201);
+          expect(res.status).toEqual(200);
         });
-    });// it block
-  });// inner describe block
-});// outter describe
-
-/// if testing for errors test is .CATCH blcok, if for VALID, in .THEN
+    });
+  });
+  describe('DELETE /api/v1/tree/id=UUID', () => {
+    it('should delete the a previously created tree', () => {
+      // console.log(mockId, 'MOCK ID IN GET BLOCK')
+      return superagent.delete(`:${testPort}/api/v1/tree?id=${mockId}`)
+        .then((res) => {
+          expect(res.body.title).toEqual(mockResource.title);
+          expect(res.body.content).toEqual('');
+          expect(res.status).toEqual(204);
+        });
+    });
+  });
+  describe('GET ALL /api/v1/trees', () => {
+    it('should respond with all the trees', () => {
+      // console.log(mockId, 'MOCK ID IN GET BLOCK')
+      // this is not working
+      superagent.post(`:${testPort}/api/v1/tree`)
+        .send(mockResource)
+        .send(mockResource2);
+      return superagent.get(`:${testPort}/api/v1/tree`)
+        .then((res) => {
+          //console.log('all tree test: ', mockResource.content, mockResource2.content);
+          expect(res.body.content).toContain(mockResource.content && mockResource2.content);
+          expect(res.status).toEqual(200);
+        });
+    });
+  });
+});
+// -----------------------------------------------------------
+// INVALID RESPONSES
+// -----------------------------------------------------------
 describe('INVALID request to the API', () => {
-  describe('GET /api/v1/tree?title=', () => {
-    it('should err out with 400 status code for not sending id in query', () => {
-      return superagent.get(`:${testPort}/api/v1/tree?title=`)
+  describe('POST /api/v1/tree', () => {
+    it('should respond with bad request and status 400 if no request body or the body was invalid', () => {
+      return superagent.post(`:${testPort}/api/v1/tree?`)
+        .send(mockBadResource)
+        .catch((err) => {
+          expect(err.status).toEqual(400);
+          expect(err).toBeTruthy();
+        });
+    });
+  });
+
+  describe('INVALID GET ID NOT FOUND /api/v1/tree?id=1', () => {
+    it('should respond with not found for valid requests with an id thats not found', () => {
+      // console.log(mockId, 'MOCK ID IN GET BLOCK')
+      return superagent.get(`:${testPort}/api/v1/tree?id=1`)
+        .query({})
+        .catch((err) => {
+          expect(err.status).toEqual(404);
+          expect(err).toBeTruthy();
+        });
+    });
+  });
+  describe('INVALID GET NO ID /api/v1/tree?id=', () => {
+    it('should respond with bad request if no id is provided', () => {
+      // console.log(mockId, 'MOCK ID IN GET BLOCK')
+      return superagent.get(`:${testPort}/api/v1/tree?id=`)
         .query({})
         .catch((err) => {
           expect(err.status).toEqual(400);
           expect(err).toBeTruthy();
         });
     });
-  });//inner desc
-  describe('GET /api/v1/tree?fake=fake', () => {
-    it('should err out with 404 status code for id not found', () => {
-      return superagent.get(`:${testPort}/api/v1/tree?fake=fake`)
-        .query({})
-        .catch((err) => {
-          expect(err.status).toEqual(404);
-          expect(err).toBeTruthy();
-        });
-    });
-  });//inner desc
-  describe('POST /api/v1/tree', () => {
-    it('should err out with 400 status code for id not found', () => {
-      return superagent.get(`:${testPort}/api/v1/tree?fake=fake`)
-        .query({})
-        .catch((err) => {
-          expect(err.status).toEqual(404);
-          expect(err).toBeTruthy();
-        });
-    });
-  });// inner desc
- });// outer desc
-
-
-// GET: test 404, it should respond with 'not found' for valid requests made with an id that was not found
-// GET: test 400, it should respond with 'bad request' if no id was provided in the request
-// GET: test 200, it should contain a response body for a request made with a valid id
-// POST: test 400, it should respond with 'bad request' if no request body was provided or the body was invalid
-// POST: test 200, it should respond with the body content for a post request with a valid body
+  });
+});

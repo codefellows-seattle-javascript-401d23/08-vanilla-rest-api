@@ -1,44 +1,60 @@
 'use strict';
 
 const logger = require('../lib/logger');
-const Tree = require('../model/tree');// we are defining the variable for this module
+const tree = require('../model/tree');
 const storage = require('../lib/storage');
-//const router = require('../lib/router');
 
-module.exports = function routeTree(router) { // exporting a function that takes in 'router'
-
-  router.post('/api/v1/tree', (req, res) => {// an instance of our router it maps back to router.POST, everythign in our ty block here is equal to our try block here-- when we make our request--- it hits this-- which bounces to router which insaantiates this route and calls this try block??
-    console.log('is this our router object?', router.routes);
-
+module.exports = function routetree(router) {
+  router.post('/api/v1/tree', (req, res) => {
     logger.log(logger.INFO, 'TREE-ROUTE: POST /api/v1/tree');
+
     try {
-      const newTree = new Tree(req.body.title, req.body.content);// this defined in middleware-- url parser taking string info, sending to body parser and converting to JSON
-      storage.create('Tree', newTree)
+      const newtree = new tree(req.body.title, req.body.content);
+      storage.create('tree', newtree)
         .then((tree) => {
-          // here treee is an item under the schema/category--> comes from 'storage' into here
           res.writeHead(201, { 'Content-Type': 'application/json' });
           res.write(JSON.stringify(tree));
           res.end();
           return undefined;
         });
     } catch (err) {
-      logger.log(logger.ERROR, `ROUTE-TREE: There was a bad request ${err}`);
+      logger.log(logger.ERROR, `TREE-ROUTE: There was a bad request ${err}`);
       res.writeHead(400, { 'Content-Type': 'text/plain' });
-      res.write('Bad request THIS OTHER ONE');
+      res.write('Bad request');
       res.end();
       return undefined;
     }
-  });// POST
-  router.get('api/v1/tree', (req, res) => {
+    return undefined;
+  });
+
+  router.get('/api/v1/tree', (req, res) => {
+   
     if (!req.url.query.id) {
-      res.writeHead(400, { 'Content-Type': 'text/plain' });
+      logger.log(logger.INFO, '<----TREE-ROUTE: GET /api/v1/tree');
+      console.log('GET ROUTE req stringified IS: ', req.url.query);
+      res.writeHead(404, { 'Content-Type': 'text/plain' });
       res.write('Your request requires an id');
       res.end();
       return undefined;
-    }// ifF
-    storage.fetchOne('Tree', req.url.query.id)
+      // storage.fetchAll('tree')
+      //   .then((idArray) => {
+      //     // this seems to be working in CLI
+      //     console.log('id Array in router is: ', idArray);
+      //     res.writeHead(200, { 'Content-Type': 'application/json' });
+      //     res.write(JSON.stringify(idArray));
+      //     res.end();
+      //     return undefined;
+      //   })
+      //   .catch((err) => {
+      //     logger.log(logger.ERROR, err, JSON.stringify(err));
+      //     res.writeHead(404, { 'Content-Type': 'text/plain' });
+      //     res.write('Resource not found');
+      //     res.end();
+      //     return undefined;
+      //   });
+    }
+    storage.fetchOne('tree', req.url.query.id)
       .then((item) => {
-        console.log('fetchOne item', item);
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.write(JSON.stringify(item));
         res.end();
@@ -50,26 +66,76 @@ module.exports = function routeTree(router) { // exporting a function that takes
         res.write('Resource not found');
         res.end();
         return undefined;
-      }); // .catch here??
+      });
+
+    return undefined;
+  });// get one closing brackket
+
+  router.get('/api/v1/trees', (req, res) => {
+
+    storage.fetchAll('tree')
+      .then((idArray) => {
+        // this seems to be working in CLI
+        console.log('id Array in router is: ', idArray);
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.write(JSON.stringify(idArray));
+        res.end();
+        return undefined;
+      })
+      .catch((err) => {
+        logger.log(logger.ERROR, err, JSON.stringify(err));
+        res.writeHead(404, { 'Content-Type': 'text/plain' });
+        res.write('Resource not found');
+        res.end();
+        return undefined;
+      });
   });
+  // closing get all route
 
-  //   // storage.delete('Tree', req.url.query.id)
-  //   //   .then((item) => {
-  //   //     console.log('delete', item);
-  //   //     res.writeHead(200, { 'Content-Type': 'application/json' });
-  //   //     res.write(JSON.stringify(item));
-  //   //     res.end();
-  //   //     return undefined;
-  //   //   })
-  //   //   .catch((err) => {
-  //   //     logger.log(logger.ERROR, err, JSON.stringify(err));
-  //   //     res.writeHead(404, { 'Content-Type': 'text/plain' });
-  //   //     res.write('Resource not found');
-  //   //     res.end();
-  //   //     return undefined;
-  //   //   });
-  //   // return undefined;
+  // router.get('/api/v1/tree', (req, res) => {
+  //   storage.fetchAll('tree')
+  //     .then((all) => {// .then do something on the return, return an array or one?
+  //       res.writeHead(200, { 'Content-Type': 'application/json' });
+  //       res.write(JSON.stringify(item));
+  //       res.end();
+  //       return undefined;
+  //     })
+  //     .catch((err) => {
+  //       logger.log(logger.ERROR, err, JSON.stringify(err));
+  //       res.writeHead(404, { 'Content-Type': 'text/plain' });
+  //       res.write('Resource not found');
+  //       res.end();
+  //       return undefined;
+  //     });
+  //   return undefined;
   // });
-};
-// module
+  router.delete('/api/v1/tree', (req, res) => {
+   
+    if (!req.url.query.id) {
+      logger.log(logger.INFO, '<----TREE-ROUTE: GET /api/v1/tree');
+      console.log('GET ROUTE req stringified IS: ', req.url.query);
+      res.writeHead(404, { 'Content-Type': 'text/plain' });
+      res.write('Your request requires an id');
+      res.end();
+      return undefined;
+    }
+    storage.del('tree', req.url.query.id)
+      .then((item) => {
+        res.writeHead(204, { 'Content-Type': 'application/json' });
+        res.write(item);
+        res.end();
+        return undefined;
+      })
+      .catch((err) => {
+        logger.log(logger.ERROR, err, JSON.stringify(err));
+        res.writeHead(404, { 'Content-Type': 'text/plain' });
+        res.write('Resource not found');
+        res.end();
+        return undefined;
+      });
 
+    return undefined;
+  });
+};
+
+// compare these routes to storage!

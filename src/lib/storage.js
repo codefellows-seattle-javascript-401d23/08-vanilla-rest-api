@@ -15,55 +15,22 @@ const memory = {};
 
 // schema is the type of resource, in this case tree, and it will just be a 'string' saying this is a tree schema
 // item is an actual object we'll pass in to post a newly created tree
-// item = req.body essentially
-
-
-storage.create = function create(schema, item) {// schema is patter defined in tree?
-  logger.log(logger.INFO, 'STORAGE: Created a new resource');
+storage.create = function create(schema, item) {
   return new Promise((resolve, reject) => {
-    if (!schema) return reject(new Error('cannot create item, schema no exist!'));
-    if (!item) return reject(new Error('cannot create a new item, no item'));
-    if (!memory[schema]) memory[schema] = {};/// if there's not already an object in storage, make one
-    memory[schema][item.id] = item;// then set the item into it?
+    if (!schema) return reject(new Error('Cannot create a new item, schema required'));
+    if (!item) return reject(new Error('Cannot create a new item, item required'));
+
+    if (!memory[schema]) memory[schema] = {};
+
+    memory[schema][item.id] = item;
+    logger.log(logger.INFO, 'STORAGE: Created a new resource');
+    console.log(`STORAGE.CREATE above return, schema is: ${schema} and item is: `, item );
     return resolve(item);
   });
 };
 
 storage.fetchOne = function fetchOne(schema, id) {
-  return new Promise((resolve, reject) => {
-    if (!schema) return reject(new Error('expected schema name'));
-    if (!id) return reject(new Error('expected id'));
-    if (!memory[schema]) return reject(new Error('schema not found'));
-    const item = memory[schema][id];
-    if (!item) {
-      return reject(new Error('item not found'));
-    } 
-    console.log('what is ITEM???', item)
-    //item should now be resolved as instance of a "note" resolvign and sending just properties nested uner the 'type' schema
-    return resolve(item);
-    // return undefined;
-  });
-};
-
-storage.fetchAll = function fetchAll() {
-  return new Promise((resolve, reject) => {
-    if (!schema) return reject(new Error('expected schema name'));
-    if (!id) return reject(new Error('expected id'));
-    if (!memory[schema]) return reject(new Error('schema not found'));
-    const item = memory[schema][id];
-    if (!item) {
-      return reject(new Error('item not found'));
-    } 
-    const allTrees = [];
-    allTrees.push(resolve);
-    console.log(allTrees);
-    return Promise.all(allTrees); // i have no idea how to test this!!!!!!!
-  });
-  
-  
-};
-
-storage.update = function update(schema, id) {
+  // takes in a schema(so what directory) and id(what item specifically)
   return new Promise((resolve, reject) => {
     if (!schema) return reject(new Error('expected schema name'));
     if (!id) return reject(new Error('expected id'));
@@ -75,6 +42,27 @@ storage.update = function update(schema, id) {
     return resolve(item);
     // return undefined;
   });
+};
+
+storage.fetchAll = function fetchAll(schema) {
+  // first need to know how many items in storage then call for each item?
+  // so for each item in memory
+  // gather all promises in array, resolve then return
+  //can this return an array of promises?
+// so: return resolve(array);
+  return new Promise((resolve, reject) => {
+    if (!schema) return reject(new Error('expected schema name'));
+    if (!memory[schema]) return reject(new Error('schema not found'));
+    const idArray = Object.keys(memory[schema]);
+    console.log(idArray);
+    // const all = memory[schema];
+    return resolve(idArray);
+  // return undefined;
+  });
+
+};
+
+storage.update = function update() {
 
 };
 
@@ -83,17 +71,14 @@ storage.delete = function del(schema, id) {
     if (!schema) return reject(new Error('expected schema name'));
     if (!id) return reject(new Error('expected id'));
     if (!memory[schema]) return reject(new Error('schema not found'));
-  
     const item = memory[schema][id];
-  
     if (!item) {
       return reject(new Error('item not found'));
-    }
-    delete memory[schema][id];  // item has all info I neeed????
-    console.log(allTrees); /// nothing works so how can i test>!!>!>!>!!>!>
-  
-    return resolve('success');
-  
+    } 
+    delete memory[schema][id];
+    return resolve('deleted');
+    // return undefined;
   });
-};
+  
 
+};
