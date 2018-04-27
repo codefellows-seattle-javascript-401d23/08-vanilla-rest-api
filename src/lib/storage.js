@@ -31,19 +31,18 @@ storage.fetchOne = function fetchOne(schema, id) {
   });
 };
 
-storage.fetchAll = function fetchAll(schema, id) {
+storage.fetchAll = function fetchAll(schema) {
   return new Promise((resolve, reject) => {
     if (!schema) return reject(new Error('expected schema name'));
-    if (!id) return reject(new Error('expected id'));
     if (!memory[schema]) return reject(new Error('schema not found'));
     
     const allItems = Object.values(memory[schema]);
-    const notes = allItems.map(ids => memory[ids]);
+    const pandas = allItems.map(panda => panda.id);
     
-    if (!notes) {
+    if (!pandas) {
       return reject(new Error('object not found'));
     }
-    return resolve(notes);
+    return resolve(pandas);
   });
 };
 
@@ -59,8 +58,8 @@ storage.delete = function del(schema, id) {
       return reject(new Error('item not found'));
     }
 
-    delete item.memory.id;
+    delete memory[schema][id];
 
-    return resolve('success');
+    return resolve(item);
   });
 };
