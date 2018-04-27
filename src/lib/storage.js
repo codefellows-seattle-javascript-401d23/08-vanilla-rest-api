@@ -66,7 +66,7 @@ storage.update = function update() {
 
 };
 
-storage.delete = function del(schema, id) {
+storage.del = function del(schema, id) {
   return new Promise((resolve, reject) => {
     if (!schema) return reject(new Error('expected schema name'));
     if (!id) return reject(new Error('expected id'));
@@ -76,8 +76,8 @@ storage.delete = function del(schema, id) {
       return reject(new Error('item not found'));
     } 
     delete memory[schema][id];
-    return resolve('deleted');
-    // return undefined;
+    return resolve('item deleted');
+    //return undefined;
   });
   
 
