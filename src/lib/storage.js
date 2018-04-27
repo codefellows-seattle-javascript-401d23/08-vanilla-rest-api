@@ -2,6 +2,8 @@
 
 const logger = require('./logger');
 const storage = module.exports = {};
+// const fs = require('fs');
+
 const memory = {};
 
 // memory = {
@@ -37,19 +39,38 @@ storage.fetchOne = function fetchOne(schema, id) {
     if (!item) {
       return reject(new error('item not found'));
     }
+    console.log(item);
     return resolved(item);
     // return undefined;
   });
 };
 
-// storage.fetchAll = function fetchAll() {
-//   //  codez here
-// };
+storage.fetchAll = function fetchAll(schema) {
+  return new Promise((resolve, reject) => {
+    if (!schema) return reject(new Error('no schema'));
+    if (!memory[schema]) return reject(new Error('memory schema not found'));
+    const allLlamas = allItems.map(llama => llama.id);
+    if (!llamas) {
+      return reject(new Error('Llama Object not found'));
+    }
+    return resolve(llamas);
+  });
+};
 
 // storage.update = function update() {
-//   // codez here
+//   // I didn't have time to tackle this one...
 // };
 
-// storage.delete = function remove() {
-//   //  codez here
-// };
+storage.delete = function remove(schema, id) {
+  return new Promise((resolve, reject) => {
+    if (!schema) return reject(new Error('expected id'));
+    if (!id) return reject(new Error('expected id'));
+    if (!memory[schema]) return(new Error('schema not found'));
+    const item = memory[schema][id];
+    if (!item) {
+      return reject(new error('item not found'));
+    }
+    delete item.memory.id;
+    return resolved(item);
+  });
+};

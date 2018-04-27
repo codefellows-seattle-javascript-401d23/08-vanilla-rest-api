@@ -6,11 +6,7 @@ const urlParser = require('./url-parser');
 
 const Router = module.exports = function router() {
   this.routes = {
-    GET: {
-      // a hard coded example
-      // '/api/v1/llama': (req, res) => {},
-      // '/api/vi/llama/:id': (req, res) => {},
-    },
+    GET: {},
     POST: {},
     PUT: {},
     DELETE: {},
@@ -37,18 +33,24 @@ Router.prototype.delete = function remove(endpoint, callback) {
 // return a promise.all these need to be wrapped in promises...
 Router.prototype.route = function route() {
   return (req, res) => {
+    // bodyParser(req)
+    // .then(body => {
+    //   console.log(body, 'this time its going to work!')
+    // })
     Promise.all([
       urlParser(req), // middleware
       bodyParser(req), // middleware
     ])
       .then(() => { // req.method GET {}, POST [] PUT [] DELETE {}
-        if (typeof this.routes[req.method][req.url.pathname] === 'function') {
-          this.routes[req.method][req.url.pathname](req, res);
-          return; // 
+      if (typeof this.routes[req.method][req.url.pathname] === 'function') {
+        this.routes[req.method][req.url.pathname](req, res);
+        // console.log(res, "the response in router.js");
+          return; 
       }
       res.writeHead(404, { 'Content-Type': 'text/plain' });
       res.write('Route Not Found FROM HERE');
       res.end();
+      // return undefined;
   })
   .catch((err) => {
     if (err instanceof SyntaxError) {
@@ -66,5 +68,3 @@ Router.prototype.route = function route() {
   });
   };
 };
-
-
