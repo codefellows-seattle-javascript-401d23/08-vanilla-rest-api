@@ -73,19 +73,21 @@ describe('BAD requests to API', () => {
         .then(() => {})
         .catch((err) => {
           expect(err).toBeTruthy();
+          expect(err.message).toEqual('Bad Request');
           expect(err.status).toEqual(400);
         });
     });
   }); // bad POST
   describe('GET /api/v1/cat invalid and no id', () => {
     test('should respond with 404', () => {
-      return superagent.get(`:${testPort}/api/v1/cat?id=${4}`)
+      return superagent.get(`:${testPort}/api/v1/cat?id=4`)
         .then(() => {})
         .catch((err) => {
+          expect(err.message).toEqual('Bad request');
           expect(err).toBeTruthy();
           expect(err.status).toEqual(404);
         });
-    });
+    }); // bad GET ONE
     test('should respond with 400', () => {
       return superagent.get(`:${testPort}/api/v1/cat`)
         .then(() => {})

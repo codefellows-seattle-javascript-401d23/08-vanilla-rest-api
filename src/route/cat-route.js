@@ -5,8 +5,6 @@ const Cat = require('../model/cat');
 const storage = require('../lib/storage');
 const resWrite = require('../lib/res-writer');
 
-// router.[WHATEVER] takes in 'endpoint', function
-
 module.exports = function routeCat(router) {
   router.post('/api/v1/cat', (req, res) => {
     logger.log(logger.INFO, 'CAT-ROUTE: POST /api/v1/cat');
@@ -18,7 +16,7 @@ module.exports = function routeCat(router) {
           return undefined;
         });
     } catch (err) {
-      logger.log(logger.ERROR, `CAT-ROUTE: Bad Request ${err}`);
+      // logger.log(logger.ERROR, `CAT-ROUTE: Bad Request ${err}`);
       resWrite(res, 400, 'text/plain', 'Bad request');
       return undefined;
     }

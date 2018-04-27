@@ -29,7 +29,7 @@ storage.fetchOne = function fetchOne(schema, id) {
         return Promise.reject(err);
       }
     })
-    .catch(err => logger.log(logger.ERROR, err));
+    .catch(err => err);
 };
 
 storage.fetchAll = function fetchAll(schema) {

@@ -24,7 +24,7 @@ module.exports = function bodyParser(req) {
     });
 
     req.on('error', (err) => {
-      logger.log(logger.ERROR, `BODY-PARSER: Error occured parsing body ${err}`);
+      logger.log(logger.ERROR, `BODY-PARSER: Error occurred parsing body ${err}`);
       return reject(err);
     });
     return undefined;
