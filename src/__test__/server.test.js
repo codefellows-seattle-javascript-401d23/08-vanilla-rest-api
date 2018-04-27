@@ -5,7 +5,7 @@ const superagent = require('superagent');
 
 const testPort = 5000;
 const mockResource = { name: 'Hummingbird', type: 'Tiny Tiny', info: 'Cute but mean.' };
-// let mockId = null;
+let mockId = null;
 
 beforeAll(() => server.start(testPort));
 afterAll(() => server.stop());
@@ -18,6 +18,11 @@ describe('VALID request to the API', () => {
       return superagent.post(`:${testPort}/api/v1/bird`)
         .send(mockResource)
         .then((res) => {
+          mockId = res.body.id;
+          // why do we need to reassign this?
+          // Because the id is created when the item is created.
+          // It won't have a value we can use until we send the POST request
+          // and receive the response.
           expect(res.body.name).toEqual(mockResource.name);
           expect(res.body.type).toEqual(mockResource.type);
           expect(res.body.info).toEqual(mockResource.info);
@@ -28,19 +33,13 @@ describe('VALID request to the API', () => {
   });
   describe('GET /api/v1/bird?id', () => {
     it('should respond with status 200', () => {
-      return superagent.post(`:${testPort}/api/v1/bird`)
-        .send(mockResource);
-      // .then((res) => {
-      // mockId = res.body.id;
-      // why do we need to reassign this?
-      // Because the id is created when the item is created.
-      // It won't have a value we can use until we send the POST request
-      // and receive the response.
-      // expect(res.body.name).toEqual(mockResource.name);
-      // expect(res.body.type).toEqual(mockResource.type);
-      // expect(res.body.info).toEqual(mockResource.info);
-      // expect(res.status).toEqual(200);
-      // });
+      return superagent.get(`:${testPort}/api/v1/bird?id=${mockId}`)
+        .then((res) => {
+          expect(res.body.name).toEqual(mockResource.name);
+          expect(res.body.type).toEqual(mockResource.type);
+          expect(res.body.info).toEqual(mockResource.info);
+          expect(res.status).toEqual(200);
+        });
     });
   });
 });
