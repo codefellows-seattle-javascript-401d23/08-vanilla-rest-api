@@ -32,12 +32,20 @@ describe('VALID request to the API', () => {
     });
   });
   describe('GET /api/v1/bird?id', () => {
-    it('should respond with status 200', () => {
+    it('should respond with status 200 and the requested bird.', () => {
       return superagent.get(`:${testPort}/api/v1/bird?id=${mockId}`)
         .then((res) => {
           expect(res.body.name).toEqual(mockResource.name);
           expect(res.body.type).toEqual(mockResource.type);
           expect(res.body.info).toEqual(mockResource.info);
+          expect(res.status).toEqual(200);
+        });
+    });
+  });
+  describe('GET /api/v1/allbirds', () => {
+    it('should respond with status 200.', () => {
+      return superagent.get(`:${testPort}/api/v1/allbirds`)
+        .then((res) => {
           expect(res.status).toEqual(200);
         });
     });

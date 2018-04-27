@@ -1,23 +1,28 @@
-![cf](https://i.imgur.com/7v5ASc8.png) Lab 08: Vanilla REST API
+Lab 08: Vanilla REST API
 ======
 
-## Submission Instructions
-  * fork this repository & create a new branch for your work
-  * push to your repository
-  * submit a pull request to this repository
-  * submit a link to your PR in canvas
-  * write a question and observation on canvas
+## This is a very simple REST API, to store and retrieve info about birds. While the server is running, it will store name, type, and info for each item. There is no persistent storage.
 
-## Learning Objectives  
-* students will learn to use promise constructs to manage asynchronous code
-* students will learn to create a vanilla RESTful API with in-memory persistence
+## Getting Started
+In a node.js environment, from the root of this repo, enter these commands to start the server on port 3000:
+* npm i
+* npm start
 
-## Requirements
-#### Configuration
-  * `.gitignore`
-  * `.eslintrc`
-  * `package.json`
-  * `README.md`
+## API Endpoints
+
+* To create a new bird resource:
+ http POST :3000/api/v1/bird name=birdname type=birdtype info='extra info about this bird'
+ This will return a JSON object including a newly-generated id which can be used to retrieve that resource.
+ 
+ * To retrieve an array of all stored resource IDs: 
+ http GET :3000/api/v1/allIds
+ 
+* To retrieve a resource by id, for example if id is '1234-5678'
+http GET :3000/api/v1/bird?id=1234-5678
+
+* To retrieve a list of all stored birds:
+http GET :3000/api/v1/allbirds
+
 
 #### Feature Tasks
 * create the following directories to organize your code:
