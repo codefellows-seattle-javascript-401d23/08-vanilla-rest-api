@@ -48,6 +48,9 @@ module.exports = function routeCat(router) {
     logger.log(logger.INFO, 'CAT-ROUTE: GET ALL /api/v1/cats');
     storage.fetchAll('Cat')
       .then((cats) => {
+        for (let i = 0; i < cats.length; i++) {
+          cats[i] = cats[i].replace(/\.\w{4}$/g, '');
+        }
         resWrite(res, 200, 'application/json', JSON.stringify(cats));
         return undefined;
       })
@@ -88,7 +91,7 @@ module.exports = function routeCat(router) {
     storage.delete('Cat', req.url.query.id)
       .then(() => {
         logger.log(logger.INFO, `DELETE: File at ${req.url.query.id}`);
-        resWrite(res, 204, 'application/json', '');
+        resWrite(res, 204, 'text/plain', '');
         return undefined;
       })
       .catch((err) => {

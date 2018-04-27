@@ -13,7 +13,7 @@ storage.create = function create(schema, item) {
   return fs.writeFileProm(`${__dirname}/../data/${schema}/${item.id}.json`, jsonItem)
     .then(() => {
       logger.log(logger.INFO, `STORAGE: Created new cat ${item}`);
-      return item;
+      return Promise.resolve(item);
     })
     .catch(err => Promise.reject(err));
 };
@@ -24,7 +24,7 @@ storage.fetchOne = function fetchOne(schema, id) {
   return fs.readFileProm(`${__dirname}/../data/${schema}/${id}.json`)
     .then((data) => {
       try {
-        return JSON.parse(data.toString());
+        return Promise.resolve(JSON.parse(data.toString()));
       } catch (err) {
         return Promise.reject(err);
       }
