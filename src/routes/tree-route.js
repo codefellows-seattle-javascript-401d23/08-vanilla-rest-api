@@ -30,28 +30,28 @@ module.exports = function routetree(router) {
   router.get('/api/v1/tree', (req, res) => {
    
     if (!req.url.query.id) {
-      // logger.log(logger.INFO, '<----TREE-ROUTE: GET /api/v1/tree');
-      // console.log('GET ROUTE req stringified IS: ', req.url.query);
-      // res.writeHead(404, { 'Content-Type': 'text/plain' });
-      // res.write('Your request requires an id');
-      // res.end();
-      // return undefined;
-      storage.fetchAll('tree')
-        .then((idArray) => {
-          // this seems to be working in CLI
-          console.log('id Array in router is: ', idArray);
-          res.writeHead(200, { 'Content-Type': 'application/json' });
-          res.write(JSON.stringify(idArray[0]));
-          res.end();
-          return undefined;
-        })
-        .catch((err) => {
-          logger.log(logger.ERROR, err, JSON.stringify(err));
-          res.writeHead(404, { 'Content-Type': 'text/plain' });
-          res.write('Resource not found');
-          res.end();
-          return undefined;
-        });
+      logger.log(logger.INFO, '<----TREE-ROUTE: GET /api/v1/tree');
+      console.log('GET ROUTE req stringified IS: ', req.url.query);
+      res.writeHead(404, { 'Content-Type': 'text/plain' });
+      res.write('Your request requires an id');
+      res.end();
+      return undefined;
+      // storage.fetchAll('tree')
+      //   .then((idArray) => {
+      //     // this seems to be working in CLI
+      //     console.log('id Array in router is: ', idArray);
+      //     res.writeHead(200, { 'Content-Type': 'application/json' });
+      //     res.write(JSON.stringify(idArray));
+      //     res.end();
+      //     return undefined;
+      //   })
+      //   .catch((err) => {
+      //     logger.log(logger.ERROR, err, JSON.stringify(err));
+      //     res.writeHead(404, { 'Content-Type': 'text/plain' });
+      //     res.write('Resource not found');
+      //     res.end();
+      //     return undefined;
+      //   });
     }
     storage.fetchOne('tree', req.url.query.id)
       .then((item) => {
@@ -69,7 +69,28 @@ module.exports = function routetree(router) {
       });
 
     return undefined;
+  });// get one closing brackket
+
+  router.get('/api/v1/trees', (req, res) => {
+
+    storage.fetchAll('tree')
+      .then((idArray) => {
+        // this seems to be working in CLI
+        console.log('id Array in router is: ', idArray);
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.write(JSON.stringify(idArray));
+        res.end();
+        return undefined;
+      })
+      .catch((err) => {
+        logger.log(logger.ERROR, err, JSON.stringify(err));
+        res.writeHead(404, { 'Content-Type': 'text/plain' });
+        res.write('Resource not found');
+        res.end();
+        return undefined;
+      });
   });
+  // closing get all route
 
   // router.get('/api/v1/tree', (req, res) => {
   //   storage.fetchAll('tree')

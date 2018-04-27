@@ -49,7 +49,7 @@ describe('VALID request to the API', () => {
         });
     });
   });
-  describe('GET /api/v1/tree', () => {
+  describe('GET ALL /api/v1/trees', () => {
     it('should respond with all the trees', () => {
       // console.log(mockId, 'MOCK ID IN GET BLOCK')
       // this is not working
@@ -58,44 +58,48 @@ describe('VALID request to the API', () => {
         .send(mockResource2);
       return superagent.get(`:${testPort}/api/v1/tree`)
         .then((res) => {
-          console.log('all tree test: ', mockResource.content, mockResource2.content);
+          //console.log('all tree test: ', mockResource.content, mockResource2.content);
           expect(res.body.content).toContain(mockResource.content && mockResource2.content);
           expect(res.status).toEqual(200);
         });
     });
   });
 });
+// -----------------------------------------------------------
+// INVALID RESPONSES
+// -----------------------------------------------------------
 describe('INVALID request to the API', () => {
   describe('POST /api/v1/tree', () => {
     it('should respond with bad request and status 400 if no request body or the body was invalid', () => {
-      return superagent.post(`:${testPort}/api/v1/tree`)
+      return superagent.post(`:${testPort}/api/v1/tree?`)
         .send(mockBadResource)
-        .catch((res) => {
-          expect(res.status).toEqual(400);
-          expect(res.body).toEqual('Bad Request');
+        .catch((err) => {
+          expect(err.status).toEqual(400);
+          expect(err).toBeTruthy();
         });
     });
   });
 
-  describe('GET /api/v1/tree?id=1', () => {
+  describe('INVALID GET ID NOT FOUND /api/v1/tree?id=1', () => {
     it('should respond with not found for valid requests with an id thats not found', () => {
       // console.log(mockId, 'MOCK ID IN GET BLOCK')
       return superagent.get(`:${testPort}/api/v1/tree?id=1`)
-        .catch((res) => {
-          expect(res.status).toEqual(404);
-          expect(res.body.content).toEqual('Your request requires an id');
+        .query({})
+        .catch((err) => {
+          expect(err.status).toEqual(404);
+          expect(err).toBeTruthy();
         });
     });
   });
-  describe('GET /api/v1/tree?id=', () => {
+  describe('INVALID GET NO ID /api/v1/tree?id=', () => {
     it('should respond with bad request if no id is provided', () => {
       // console.log(mockId, 'MOCK ID IN GET BLOCK')
       return superagent.get(`:${testPort}/api/v1/tree?id=`)
-        .catch((res) => {
-          expect(res.status).toEqual(400);
-          expect(res.body).toEqual('bad request');
+        .query({})
+        .catch((err) => {
+          expect(err.status).toEqual(400);
+          expect(err).toBeTruthy();
         });
     });
   });
-
 });
