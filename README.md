@@ -24,4 +24,4 @@ Architecture
 node, express, jQuery, javascript, babel
 
 Credits:
-Thanks to Judy, Seth, Michael and mob programming team.
+Thanks to Judy, Seth, Michael and mob programming team
