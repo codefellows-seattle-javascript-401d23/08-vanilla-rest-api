@@ -14,7 +14,12 @@
 - 04-25-2018 3:30pm - Began work on project
 - 04-25-2018 06:30pm - environment up and running 
 - 04-25-2018 06:30pm - testing GET method
-- 04-26-2018 12:19am - submitting first version
+- 04-26-2018 12:19am - stopping for the night
+- 04-26-2018 4:30pm - started working again!
+- 04-26-2018 5:30pm - Post test working!
+- 04-26-2018 6:30pm - POST functioning in cli
+- 04-26-2018 9:10pm - stopping for the night
 
 ##Credits and Collaborations
-- Thanks Judy Vue for demo code.
+- Thanks Judy Vue for demo code and helping with the POST route.
+- Thanks to Josh Fredrickson for help with the fetchAll object idea.
