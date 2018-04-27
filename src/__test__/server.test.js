@@ -32,13 +32,14 @@ describe('VALID request to the API', () => {
           expect(res.body.content).toEqual(mockResource.content);
           expect(res.status).toEqual(200);
         });
+      // if testing for errors, test in a .catch block
     });
   });
 });
 
 describe('INVALID request to the API', () => {
   describe('GET /api/v1/frog', () => {
-    it('should err out with 404 status code for not sending anything', () => {
+    it('should err out with 404 status code for not sending id', () => {
       return superagent.get(`:${testPort}/api/v1/frog`)
         .query({})
         .then(() => {})
@@ -50,7 +51,7 @@ describe('INVALID request to the API', () => {
     it('should respond with not found if id was not found', () => {
       return superagent.get(`:${testPort}/api/v1/frog?id=5`)
         .catch((err) => {
-          expect(err.status).toEqual(400);
+          expect(err.status).toEqual(404);
           expect(err).toBeTruthy();
         });
     });
@@ -58,7 +59,15 @@ describe('INVALID request to the API', () => {
       return superagent.get(`:${testPort}/api/v1/frog?id=${mockId}`)
         .query({})
         .catch((err) => {
-          expect(err.status).toEqual(404);
+          expect(err.status).toEqual(400);
+          expect(err).toBeTruthy();
+        });
+    });
+    it('it should respond with bad request if no body was provided', () => {
+      return superagent.get(`:${testPort}/api/v1/frog?id=${mockId}`)
+        .query({})
+        .catch((err) => {
+          expect(err.status).toEqual(400);
           expect(err).toBeTruthy();
         });
     });

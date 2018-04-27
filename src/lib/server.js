@@ -5,8 +5,11 @@ const http = require('http');
 const Router = require('./router');
 
 const router = new Router();
-require('../route/frog-route')(router);
+require('../route/route-frog')(router);
 
+console.log(router, 'ROUTER IN SERVER');
+
+// Application setup
 const app = http.createServer(router.route());
 
 const server = module.exports = {};

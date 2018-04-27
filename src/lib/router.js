@@ -23,10 +23,6 @@ Router.prototype.post = function post(endpoint, callback) {
   this.routes.POST[endpoint] = callback;
 };
 
-Router.prototype.put = function put(endpoint, callback) {
-  this.routes.PUT[endpoint] = callback;
-};
-
 Router.prototype.delete = function del(endpoint, callback) {
   this.routes.DELETE[endpoint] = callback;
 };

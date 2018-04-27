@@ -30,14 +30,13 @@ storage.fetchOne = function fetchOne(schema, id) {
   });
 };
 
-storage.fetchAll = function fetchAll(schema, id) {
+storage.fetchAll = function fetchAll(schema) {
   return new Promise((resolve, reject) => {
     if (!schema) return reject(new Error('expected schema name'));
-    if (!id) return reject(new Error('expected id'));
     if (!memory[schema]) return reject(new Error('schema not found'));
 
     const allItems = Object.values(memory[schema]);
-    const frog = allItems.map(ids => memory[ids]);
+    const frog = allItems.map(frogs => frogs.id);
 
     if (!frog) {
       return reject(new Error('object not found'));
@@ -46,6 +45,15 @@ storage.fetchAll = function fetchAll(schema, id) {
   });
 };
 
-storage.delete = function del() {
+storage.delete = function del(schema, id) {
+  return new Promise((resolve, reject) => {
+    if (!schema) return reject(new Error('expected schema name'));
+    if (!id) return reject(new Error('expected id'));
+    if (!memory[schema]) return reject(new Error('schema not found'));
 
+    const item = memory[schema][id];
+    delete memory[schema][id];
+
+    return resolve(item);
+  });
 };
