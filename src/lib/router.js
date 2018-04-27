@@ -52,7 +52,6 @@ Router.prototype.route = function route() {
           res.end();
           return undefined;
         }
-        console.log(req.body, 'ROUTER: REQ.BODY');
         logger.log(logger.ERROR, JSON.stringify(err));
         res.writeHead(400, { 'Content-Type': 'text/plain' });
         res.write('ROUTER .CATCH: Bad Request');

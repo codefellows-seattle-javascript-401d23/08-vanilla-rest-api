@@ -18,18 +18,29 @@ describe('VALID request to the API', () => {
       return superagent.post(`:${testPort}/api/v1/bird`)
         .send(mockResource)
         .then((res) => {
-          console.log(res.body);
-          // mockId = res.body.id;
-          // why do we need to reassign this?
-          // Because the id is created when the item is created.
-          // It won't have a value we can use until we send the POST request
-          // and receive the response.
           expect(res.body.name).toEqual(mockResource.name);
           expect(res.body.type).toEqual(mockResource.type);
           expect(res.body.info).toEqual(mockResource.info);
           expect(res.status).toEqual(201);
         });
       // if testing for errors, test them in a .catch block
+    });
+  });
+  describe('GET /api/v1/bird?id', () => {
+    it('should respond with status 200', () => {
+      return superagent.post(`:${testPort}/api/v1/bird`)
+        .send(mockResource);
+      // .then((res) => {
+      // mockId = res.body.id;
+      // why do we need to reassign this?
+      // Because the id is created when the item is created.
+      // It won't have a value we can use until we send the POST request
+      // and receive the response.
+      // expect(res.body.name).toEqual(mockResource.name);
+      // expect(res.body.type).toEqual(mockResource.type);
+      // expect(res.body.info).toEqual(mockResource.info);
+      // expect(res.status).toEqual(200);
+      // });
     });
   });
 });
