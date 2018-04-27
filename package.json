@@ -4,7 +4,9 @@
   "description": "![cf](https://i.imgur.com/7v5ASc8.png) Lab 08: Vanilla REST API ======",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "eslint .",
+    "test": "jest",
+    "start": "nodemon index.js"
   },
   "repository": {
     "type": "git",
@@ -31,6 +33,7 @@
     "babel": "^6.23.0",
     "dotenv": "^5.0.1",
     "faker": "^4.1.0",
+    "superagent": "^3.8.2",
     "uuid": "^3.2.1",
     "winston": "^3.0.0-rc5"
   }
