@@ -1,13 +1,6 @@
 ![cf](https://i.imgur.com/7v5ASc8.png) Lab 08: Vanilla REST API
 ======
 
-## Submission Instructions
-  * fork this repository & create a new branch for your work
-  * push to your repository
-  * submit a pull request to this repository
-  * submit a link to your PR in canvas
-  * write a question and observation on canvas
-
 ## Requirements
 #### Configuration
   * `.gitignore`
@@ -55,3 +48,16 @@
  * `POST`: test 400, it should respond with 'bad request' if no request body was provided or the body was invalid
  * `POST`: test 200, it should respond with the body content for a post request with a valid body
 
+
+## to run
+in the CLI
+type node index.js
+then in another tab type:
+
+you must post before anything else because nothing is stored
+
+http POST :3000/api/v1/tree title=__ content=____
+http GET :3000/api/v1/tree title==__ content==____
+http GET ALL :3000/api/v1/trees 
+http DELETE :3000/api/v1/tree title=__ content=__
+http PUT --- NOT IMPLIMENTED

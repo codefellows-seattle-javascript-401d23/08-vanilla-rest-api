@@ -30,9 +30,9 @@ module.exports = function routetree(router) {
   router.get('/api/v1/tree', (req, res) => {
    
     if (!req.url.query.id) {
-      logger.log(logger.INFO, '<----TREE-ROUTE: GET /api/v1/tree');
+      logger.log(logger.INFO, 'GET /api/v1/tree');
       console.log('GET ROUTE req stringified IS: ', req.url.query);
-      res.writeHead(404, { 'Content-Type': 'text/plain' });
+      res.writeHead(400, { 'Content-Type': 'text/plain' });
       res.write('Your request requires an id');
       res.end();
       return undefined;
@@ -112,17 +112,18 @@ module.exports = function routetree(router) {
   router.delete('/api/v1/tree', (req, res) => {
    
     if (!req.url.query.id) {
-      logger.log(logger.INFO, '<----TREE-ROUTE: GET /api/v1/tree');
+      logger.log(logger.INFO, 'DELETE: GET /api/v1/tree');
       console.log('GET ROUTE req stringified IS: ', req.url.query);
       res.writeHead(404, { 'Content-Type': 'text/plain' });
-      res.write('Your request requires an id');
+      res.write('Your delete request requires an id');
       res.end();
       return undefined;
     }
     storage.del('tree', req.url.query.id)
       .then((item) => {
+        console.log(item, ' deleted');
         res.writeHead(204, { 'Content-Type': 'application/json' });
-        res.write(item);
+        res.write('');
         res.end();
         return undefined;
       })
