@@ -6,7 +6,7 @@ const http = require('http');
 const Router = require('./router');
 
 const router = new Router();
-require('../route/catze-route')(router);
+require('../route/catz-route')(router);
 
 const app = http.createServer(router.route());
 

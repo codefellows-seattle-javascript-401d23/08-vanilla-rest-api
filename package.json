@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "lint": "eslint .",
     "test": "jest --coverage",
     "start": "nodemon index.js"
   },

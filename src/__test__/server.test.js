@@ -59,13 +59,13 @@ describe('INVALID request to the API', () => {
         });
     });
 
-    // it('should err out with 400 status code for result with no id', () => {
-    //   return superagent.get(`:${testPort}/api/v1/catz?id= `)
-    //     .query({})
-    //     .catch((err) => {
-    //       expect(err.status).toEqual(400);
-    //       expect(err).toBeTruthy();
-    //     });
-    // });
+    it('should err out with 400 status code for result with no id', () => {
+      return superagent.get(`:${testPort}/api/v1/catz?id= `)
+        .query({})
+        .catch((err) => {
+          expect(err.status).toEqual(404);
+          expect(err).toBeTruthy();
+        });
+    });
   });
 });
