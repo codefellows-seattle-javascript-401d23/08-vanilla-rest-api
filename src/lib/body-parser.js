@@ -1,13 +1,7 @@
 'use strict';
 
-const url = require('url');
-const queryString = require('querystring');
-
 module.exports = function bodyParser(req) {
   return new Promise((resolve, reject) => {
-    req.url = url.parse(req.url);
-    req.url.query = queryString.parse(req.url.query);
-
     // if it's a GET request (or DELETE, but we're not going to use DELETE for this lab.)
     if (req.method !== 'POST' && req.method !== 'PUT') {
       return resolve(req);
