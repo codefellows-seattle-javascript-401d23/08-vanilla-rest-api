@@ -29,12 +29,17 @@ storage.fetchOne = function fetchOne(schema, id) {
   });
 };
 
-storage.fetchAll = function fetchAll(schemaArg) {
+storage.fetchAll = function fetchAll(schemaArg, returnIds) {
   return new Promise((resolve, reject) => {
     // use Bird schema if none was specified.
     let schema = 'Bird';
     if (schemaArg) schema = schemaArg;
     if (!memory[schema]) return reject(new Error('Schema not found.'));
+    // if returnIds is true, return an array of all ids.
+    if (returnIds) {
+      const allIds = Object.keys(memory[schema]);
+      return resolve(allIds);
+    }
     return resolve(memory[schema]);
   });
 };

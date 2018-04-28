@@ -14,8 +14,8 @@ In a node.js environment, from the root of this repo, enter these commands to st
  http POST :3000/api/v1/bird name=birdname type=birdtype info='extra info about this bird'
  This will return a JSON object including a newly-generated id which can be used to retrieve that resource.
  
- * To retrieve an array of all stored resource IDs: 
- http GET :3000/api/v1/allIds
+ * To retrieve an array of all stored resource ids: 
+ http GET :3000/api/v1/ids
  
 * To retrieve a resource by id, for example if id is '1234-5678'
 http GET :3000/api/v1/bird?id=1234-5678

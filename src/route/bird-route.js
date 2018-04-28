@@ -65,4 +65,21 @@ module.exports = function routeBird(router) {
       });
     return undefined;
   });
+  router.get('/api/v1/ids', (req, res) => {
+    storage.fetchAll('Bird', true)
+      .then((ids) => {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.write(JSON.stringify(ids));
+        res.end();
+        return undefined;
+      })
+      .catch((err) => {
+        logger.log(logger.ERROR, err, JSON.stringify(err));
+        res.writeHead(404, { 'Content-Type': 'text/plain' });
+        res.write('Resource not found');
+        res.end();
+        return undefined;
+      });
+    return undefined;
+  });
 };
