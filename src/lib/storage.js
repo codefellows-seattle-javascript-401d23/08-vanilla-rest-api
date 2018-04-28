@@ -28,6 +28,17 @@ storage.fetchOne = function fetchOne(schema, id) {
     return resolve(item);
   });
 };
+storage.deleteOne = function deleteOne(schema, id) {
+  return new Promise((resolve, reject) => {
+    if (!schema) return reject(new Error('Expected schema name.'));
+    if (!id) return reject(new Error('Expected ID.'));
+    if (!memory[schema]) return reject(new Error('Schema not found.'));
+    const item = memory[schema][id];
+    if (!item) return reject(new Error('Item not found.'));
+    delete memory[schema][id];
+    return resolve('Item deleted');
+  });
+};
 
 storage.fetchAll = function fetchAll(schemaArg, returnIds) {
   return new Promise((resolve, reject) => {
