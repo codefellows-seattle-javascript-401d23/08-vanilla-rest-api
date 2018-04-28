@@ -56,9 +56,8 @@ module.exports = function routeBird(router) {
       return undefined;
     }
     storage.deleteOne('Bird', req.url.query.id)
-      .then((message) => {
-        res.writeHead(200, { 'Content-Type': 'text/plain' });
-        res.write(message);
+      .then(() => {
+        res.writeHead(204, { 'Content-Type': 'text/plain' });
         res.end();
         return undefined;
       })

@@ -30,6 +30,20 @@ describe('VALID request to the API', () => {
         });
       // if testing for errors, test them in a .catch block
     });
+    it('should respond with status 400 if the body was invalid', () => {
+      return superagent.post(`:${testPort}/api/v1/bird`)
+        .send({ nonsense: 'More nonsense' })
+        .catch((res) => {
+          expect(res.status).toEqual(400);
+        });
+    });
+    it('should respond with status 400 if no request body was provided.', () => {
+      return superagent.post(`:${testPort}/api/v1/bird`)
+        .send({})
+        .catch((res) => {
+          expect(res.status).toEqual(400);
+        });
+    });
   });
   describe('GET /api/v1/bird?id', () => {
     it('should respond with status 200 and the requested bird.', () => {
@@ -41,12 +55,43 @@ describe('VALID request to the API', () => {
           expect(res.status).toEqual(200);
         });
     });
+    it('should respond with status 404 when an invalid id is requested.', () => {
+      return superagent.get(`:${testPort}/api/v1/bird?id=1234`)
+        .catch((res) => {
+          expect(res.status).toEqual(404);
+        });
+    });
+    it('should respond with status 400 when no id is included in the request.', () => {
+      return superagent.get(`:${testPort}/api/v1/bird`)
+        .catch((res) => {
+          expect(res.status).toEqual(400);
+        });
+    });
   });
   describe('GET /api/v1/allbirds', () => {
     it('should respond with status 200.', () => {
       return superagent.get(`:${testPort}/api/v1/allbirds`)
         .then((res) => {
           expect(res.status).toEqual(200);
+        });
+    });
+  });
+  describe('GET /api/v1/birds/ids', () => {
+    it('should respond with status 200 and array of ids', () => {
+      return superagent.get(`:${testPort}/api/v1/bird/ids`)
+        .then((res) => {
+          expect(res.status).toEqual(200);
+          expect(res.body).toEqual([`${mockId}`]);
+        });
+    });
+  });
+});
+describe('INVALID request to the API', () => {
+  describe('/api/v1/nrkreisldkfe', () => {
+    it('should respond with status 404', () => {
+      return superagent.get(`:${testPort}/api/v1/nrkreisldkfe`)
+        .catch((res) => {
+          expect(res.status).toEqual(404);
         });
     });
   });

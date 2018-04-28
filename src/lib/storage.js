@@ -36,7 +36,7 @@ storage.deleteOne = function deleteOne(schema, id) {
     const item = memory[schema][id];
     if (!item) return reject(new Error('Item not found.'));
     delete memory[schema][id];
-    return resolve('Item deleted');
+    return resolve();
   });
 };
 
