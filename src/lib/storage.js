@@ -55,11 +55,3 @@ storage.fetchAll = function fetchAll(schemaArg, returnIds) {
   });
 };
 
-
-storage.update = function update() {
-
-};
-
-storage.delete = function del() {
-
-};
