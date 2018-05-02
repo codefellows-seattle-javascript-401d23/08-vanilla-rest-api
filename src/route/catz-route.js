@@ -1,7 +1,9 @@
 'use strict';
+
 const logger = require('../lib/logger');
 const Catz = require('../model/catz');
 const storage = require('../lib/storage');
+
 module.exports = function routeCatz(router) {
   router.post('/api/v1/catz', (req, res) => {
     logger.log(logger.INFO, 'ROUTE-CATZ: POST /api/v1/catz');
