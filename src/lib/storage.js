@@ -37,16 +37,16 @@ storage.fetchAll = function fetchAll(schema) {
     if (!memory[schema]) return reject(new Error('schema not found'));
     
     const allItems = Object.values(memory[schema]);
-    const pandas = allItems.map(panda => panda.id);
+    const items = allItems.map(item => item.id);
     
-    if (!pandas) {
+    if (!items) {
       return reject(new Error('object not found'));
     }
-    return resolve(pandas);
+    return resolve(items);
   });
 };
 
-storage.delete = function del(schema, id) {
+storage.delete = function remove(schema, id) {
   return new Promise((resolve, reject) => {
     if (!schema) return reject(new Error('expected schema name'));
     if (!id) return reject(new Error('expected id'));

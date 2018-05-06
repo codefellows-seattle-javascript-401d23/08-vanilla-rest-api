@@ -1,56 +1,66 @@
-![cf](https://i.imgur.com/7v5ASc8.png) Lab 08: Vanilla REST API
-======
+# Lab 08 Vanilla Rest API
+**Author**: Lacy Hogan
+**Version**: 1.0.0
 
-## Submission Instructions
-  * fork this repository & create a new branch for your work
-  * push to your repository
-  * submit a pull request to this repository
-  * submit a link to your PR in canvas
-  * write a question and observation on canvas
+## Overview
+This application stores information about pandas. It takes in a title and a content, and assigns it an ID using Node.js UUID. A user can create a new penguin, retrieve an existing one, retrieve all stored ones, and delete an existing one.
 
-## Learning Objectives  
-* students will learn to use promise constructs to manage asynchronous code
-* students will learn to create a vanilla RESTful API with in-memory persistence
+## Getting Started
+As a user, you will need to have Nodemon installed on your computer in order to start the server.
 
-## Requirements
-#### Configuration
-  * `.gitignore`
-  * `.eslintrc`
-  * `package.json`
-  * `README.md`
+You will need to include the following scripts in your package.json in order to run the tests and nodemon:
 
-#### Feature Tasks
-* create the following directories to organize your code:
-  * `lib`
-  * `model`
-  * `test`
-* create an HTTP server using the native NodeJS `http` module
-* create an object constructor that creates a _simple resource_ with at least 3 properties
-  * include an `id` property that is set to a unique id (**hint:** you'll need to use `node-uuid`)
-  * include two additional properties of your choice (ex: name, content, etc.)
-* create a custom body parser module that uses promises to parse the JSON body of `POST` and `PUT` requests
-* create a custom url parser module that returns a promise and uses the NodeJS `url` and `querystring` modules to parse the request url
-* create a router constructor that handles requests to `GET`, `POST`, `PUT`, and `DELETE` requests
-* create a storage module that will store resources by their schema type (ex: note) and id
+ "scripts": {
+    "test": "jest --coverage",
+    "start": "nodemon main.js",
+    "eslint": "eslint ."
 
-## Server Endpoints
-### `/api/simple-resource-name`
-* `POST` request
- * pass data as stringifed JSON in the body of a **POST** request to create a new resource
-* `GET` request
- * pass `?id=<uuid>` as a query string parameter to retrieve a specific resource (as JSON)
- * `GET ALL (storage.fetchAll)` request
- * think of an API endpoint that makes sense, e.g.`/api/v1/notes`, and use that endpoint to retrieve an array of all the resource ID's
-* `DELETE` request
- * pass `?id=<uuid>` in the query string to **DELETE** a specific resource
- * this should return a 204 status code with no content in the body
+You will need to init the following dependencies and devDependencies before utilizing this application:
 
-## Tests
-* write a test to ensure that your api returns a status code of 404 for routes that have not been registered
-* write tests to ensure the `/api/simple-resource-name` endpoint responds as described for each condition below:
- * `GET`: test 404, it should respond with 'not found' for valid requests made with an id that was not found
- * `GET`: test 400, it should respond with 'bad request' if no id was provided in the request
- * `GET`: test 200, it should contain a response body for a request made with a valid id
- * `POST`: test 400, it should respond with 'bad request' if no request body was provided or the body was invalid
- * `POST`: test 200, it should respond with the body content for a post request with a valid body
+  "devDependencies": {
+    "babel-eslint": "^8.2.3",
+    "babel-preset-env": "^1.6.1",
+    "babel-register": "^6.26.0",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.11.0",
+    "eslint-plugin-jest": "^21.15.1",
+    "jest": "^22.4.3",
+    "nodemon": "^1.17.3",
+    "superagent": "^3.8.2"
+  },
+  "dependencies": {
+    "dotenv": "^5.0.1",
+    "uuid": "^3.2.1",
+    "winston": "^3.0.0-rc5"
+  }
 
+Create a .env file and include the following:
+NODE_ENV=development
+PORT=3000
+
+## Architecture
+This application is written in JavaScript and uses Node.js. You will need nodemon installed. No external middleware was utilized, they were written internally to this application: body-parser, router, and url-parser. A storage file has been written to temporarily store data. It resets after ever test.  
+
+The test will be run using CLI. You will need to ensure that you have httpie installed on your computer. Then, in one terminal, run the command: nodemon index.js. Then, in a separate terminal, run the commands:
+
+To POST/CREATE - http POST :3000/api/pandas title=[name of species] content=[name] 
+
+- If successful, will respond with a 200 status. If an invalid post is made, will respond with a 400 status
+
+To GET/READ - http :3000/api/penguins id==[insert existing id]
+
+- If successful, will respond with a 200 status. If an invalid get is made, will respond with a 404 status
+
+To GET ALL/READ ALL - http :3000/api/penguins
+
+- If successful, will respond with a 200 status. If an invalid get is made, will respond with a 404 status
+
+to DELETE - http DELETE :3000/api/penguins id==[insert existing id]
+
+- If successful, will respond with a 204 status. If an invalid post is made, will respond with a 404 status
+
+## Change Log
+04-26-2018 11:39pm - Application functions created and passing all tests
+
+## Credits and Collaborations
